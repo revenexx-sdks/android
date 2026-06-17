@@ -214,6 +214,18 @@ class Client @JvmOverloads constructor(
     }
 
     /**
+     * Set the tenant slug sent on every request via the `X-Revenexx-Tenant` header.
+     *
+     * @param value
+     *
+     * @return this
+     */
+    fun setTenant(value: String): Client {
+        addHeader("X-Revenexx-Tenant", value)
+        return this
+    }
+
+    /**
      * Add Header
      *
      * @param key

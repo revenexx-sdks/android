@@ -56,230 +56,103 @@ Add this to your project's `pom.xml` file:
 
 ## Getting Started
 
-### Add your Android Platform
-To initialize your SDK and start interacting with Revenexx services, you need to add a new Android platform to your project. To add a new platform, go to your Revenexx console, select your project (create one if you haven't already), and click the 'Add Platform' button on the project Dashboard.
-
-From the options, choose to add a new **Android** platform and add your app credentials.
-
-Add your app <u>name</u> and <u>package name</u>. Your package name is generally the applicationId in your app-level `build.gradle` file. By registering a new platform, you are allowing your app to communicate with the Revenexx API.
-
-### Registering additional activities
-In order to capture the Revenexx OAuth callback url, the following activity needs to be added to your [AndroidManifest.xml](https://github.com/revenexx/playground-for-android/blob/master/app/src/main/AndroidManifest.xml). Be sure to replace the **[PROJECT_ID]** string with your actual Revenexx project ID. You can find your Revenexx project ID in your project settings screen in the console.
-
-```xml
-<manifest>
-    <application>
-        <activity android:name="com.revenexx.views.CallbackActivity" >
-            <intent-filter android:label="android_web_auth">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="revenexx-callback-<PROJECT_ID>" />
-            </intent-filter>
-        </activity>
-    </application>
-</manifest>
-```
-
 ### Init your SDK
 
-<p>Initialize your SDK with your Revenexx server API endpoint and project ID, which can be found in your project settings page.
+Initialize the `Client` with a `Context` and your Revenexx API endpoint, then attach your credentials. The client supports two authentication methods:
+
+- **API key** — a gateway-managed scoped key (`rvxk_…`), set via `setApiKeyAuth()`. Intended for server-side or trusted environments; never embed an API key in code shipped to end-user devices.
+- **Bearer token** — an issued JWT for interactive callers, set via `setBearerAuth()`. The value is sent as the `Authorization` header verbatim, so include the `Bearer ` prefix.
+
+Because mobile apps run on end-user devices, prefer a per-user bearer token over an embedded API key.
+
+Call `setTenant()` to route requests to your workspace; it sets the `X-Revenexx-Tenant` header on every request.
 
 ```kotlin
 import com.revenexx.Client
-import com.revenexx.services.Account
 
 val client = Client(context)
-  .setEndpoint("https://revenexx.com/v1") // Your API Endpoint
-  .setProject("<PROJECT_ID>") // Your project ID
-  .setSelfSigned(true) // Remove in production
+    .setEndpoint("https://api.revenexx.com") // Your Revenexx API endpoint
+    .setTenant("<TENANT_SLUG>")              // Your Revenexx tenant slug
+    .setBearerAuth("Bearer <JWT>")           // A per-user JWT
 ```
 
-Before starting to send any API calls to your new Revenexx instance, make sure your Android emulators has network access to the Revenexx server hostname or IP address.
+Or, with a scoped API key for trusted environments:
 
-When trying to connect to Revenexx from an emulator or a mobile device, localhost is the hostname of the device or emulator and not your local Revenexx instance. You should replace localhost with your private IP. You can also use a service like [ngrok](https://ngrok.com/) to proxy the Revenexx API.
+```kotlin
+val client = Client(context)
+    .setEndpoint("https://api.revenexx.com")
+    .setTenant("<TENANT_SLUG>")
+    .setApiKeyAuth("rvxk_...") // A gateway-managed scoped API key
+```
 
 ### Make Your First Request
 
-<p>Once your SDK object is set, access any of the Revenexx services and choose any request to send. Full documentation for any service method you would like to use can be found in your SDK documentation or in the [API References](https://revenexx.com/docs) section.
+Once your client is set up, instantiate any of the Revenexx services with it and send a request. Service methods are `suspend` functions, so call them from a coroutine scope (for example `lifecycleScope.launch` or `viewModelScope.launch`). Full documentation for every service method can be found in the [API References](https://revenexx.com/docs).
 
 ```kotlin
-// Register User
-val account = Account(client)
-val response = account.create(
-    ID.unique(),
-    "email@example.com",
-    "password",
-    "Max Mustermann"
-)
+import androidx.lifecycle.lifecycleScope
+import com.revenexx.services.Products
+import kotlinx.coroutines.launch
+
+val products = Products(client)
+
+lifecycleScope.launch {
+    val result = products.productsList()
+    Log.d("Revenexx", result.toString())
+}
 ```
 
 ### Full Example
 
 ```kotlin
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import com.revenexx.Client
-import com.revenexx.services.Account
-import com.revenexx.ID
+import com.revenexx.services.Products
+import kotlinx.coroutines.launch
 
 val client = Client(context)
-  .setEndpoint("https://revenexx.com/v1") // Your API Endpoint
-  .setProject("<PROJECT_ID>") // Your project ID
-  .setSelfSigned(true) // Remove in production
+    .setEndpoint("https://api.revenexx.com")
+    .setTenant("<TENANT_SLUG>")
+    .setBearerAuth("Bearer <JWT>")
 
-val account = Account(client)
-val user = account.create(
-    ID.unique(),
-    "email@example.com",
-    "password",
-    "Max Mustermann"
-)
-```
+val products = Products(client)
 
-### Type Safety with Models
+lifecycleScope.launch {
+    // List products
+    val list = products.productsList()
+    Log.d("Revenexx", list.toString())
 
-The Revenexx Android SDK provides type safety when working with database documents through generic methods. Methods like `listDocuments`, `getDocument`, and others accept a `nestedType` parameter that allows you to specify your custom model type for full type safety.
-
-**Kotlin:**
-```kotlin
-data class Book(
-    val name: String,
-    val author: String,
-    val releaseYear: String? = null,
-    val category: String? = null,
-    val genre: List<String>? = null,
-    val isCheckedOut: Boolean
-)
-
-val databases = Databases(client)
-
-try {
-    val documents = databases.listDocuments(
-        databaseId = "your-database-id",
-        collectionId = "your-collection-id",
-        nestedType = Book::class.java // Pass in your custom model type
-    )
-    
-    for (book in documents.documents) {
-        Log.d("Revenexx", "Book: ${book.name} by ${book.author}") // Now you have full type safety
-    }
-} catch (e: RevenexxException) {
-    Log.e("Revenexx", e.message ?: "Unknown error")
+    // Fetch a single product
+    val product = products.productsGet(id = "<PRODUCT_ID>")
+    Log.d("Revenexx", product.toString())
 }
-```
-
-**Java:**
-```java
-public class Book {
-    private String name;
-    private String author;
-    private String releaseYear;
-    private String category;
-    private List<String> genre;
-    private boolean isCheckedOut;
-
-    // Constructor
-    public Book(String name, String author, boolean isCheckedOut) {
-        this.name = name;
-        this.author = author;
-        this.isCheckedOut = isCheckedOut;
-    }
-
-    // Getters and setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
-    
-    public String getReleaseYear() { return releaseYear; }
-    public void setReleaseYear(String releaseYear) { this.releaseYear = releaseYear; }
-    
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-    
-    public List<String> getGenre() { return genre; }
-    public void setGenre(List<String> genre) { this.genre = genre; }
-    
-    public boolean isCheckedOut() { return isCheckedOut; }
-    public void setCheckedOut(boolean checkedOut) { isCheckedOut = checkedOut; }
-}
-
-Databases databases = new Databases(client);
-
-try {
-    DocumentList<Book> documents = databases.listDocuments(
-        "your-database-id",
-        "your-collection-id",
-        Book.class // Pass in your custom model type
-    );
-    
-    for (Book book : documents.getDocuments()) {
-        Log.d("Revenexx", "Book: " + book.getName() + " by " + book.getAuthor()); // Now you have full type safety
-    }
-} catch (RevenexxException e) {
-    Log.e("Revenexx", e.getMessage() != null ? e.getMessage() : "Unknown error");
-}
-```
-
-**Tip**: You can use the `revenexx types` command to automatically generate model definitions based on your Revenexx database schema. Learn more about [type generation](https://revenexx.com/docs/products/databases/type-generation).
-
-### Working with Model Methods
-
-All Revenexx models come with built-in methods for data conversion and manipulation:
-
-**`toMap()`** - Converts a model instance to a Map format, useful for debugging or manual data manipulation:
-```kotlin
-val account = Account(client)
-val user = account.get()
-val userMap = user.toMap()
-Log.d("Revenexx", userMap.toString()) // Prints all user properties as a Map
-```
-
-**`from(map:, nestedType:)`** - Creates a model instance from a Map, useful when working with raw data:
-```kotlin
-val userData: Map<String, Any> = mapOf(
-    "\$id" to "123",
-    "name" to "John",
-    "email" to "john@example.com"
-)
-val user = User.from(userData, User::class.java)
-```
-
-**JSON Serialization** - Models can be easily converted to/from JSON using Gson (which the SDK uses internally):
-```kotlin
-import com.google.gson.Gson
-
-val account = Account(client)
-val user = account.get()
-
-// Convert to JSON
-val gson = Gson()
-val jsonString = gson.toJson(user)
-Log.d("Revenexx", "User JSON: $jsonString")
-
-// Convert from JSON
-val userFromJson = gson.fromJson(jsonString, User::class.java)
 ```
 
 ### Error Handling
 
-The Revenexx Android SDK raises a `RevenexxException` object with `message`, `code` and `response` properties. You can handle any errors by catching `RevenexxException` and present the `message` to the user or handle it yourself based on the provided error information. Below is an example.
+The Revenexx Android SDK raises a `RevenexxAPIRevenexxException` with `message`, `code`, `type` and `response` properties. Catch it to present the `message` to the user or to handle the error based on the provided information.
 
 ```kotlin
-try {
-    var user = account.create(ID.unique(),"email@example.com","password","Max Mustermann")
-    Log.d("Revenexx user", user.toMap())
-} catch(e : RevenexxException) {
-    e.printStackTrace()
+import android.util.Log
+import com.revenexx.exceptions.RevenexxAPIRevenexxException
+
+lifecycleScope.launch {
+    try {
+        val product = products.productsGet(id = "<PRODUCT_ID>")
+        Log.d("Revenexx", product.toString())
+    } catch (e: RevenexxAPIRevenexxException) {
+        Log.e("Revenexx", "${e.code}: ${e.message}")
+    }
 }
 ```
 
 ### Learn more
+
 You can use the following resources to learn more and get help
-- [Getting Started Tutorial](https://revenexx.com/docs/getting-started-for-android)
-- [Revenexx Docs](https://revenexx.com/docs)
-- [Discord Community](https://revenexx.com/discord)
-- [Revenexx Android Playground](https://github.com/revenexx/playground-for-android)
+
+- 📜 [Revenexx Docs](https://revenexx.com/docs)
+- 💬 [Discord Community](https://revenexx.com/discord)
 
 ## Contribution
 
