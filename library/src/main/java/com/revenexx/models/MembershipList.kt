@@ -1,0 +1,38 @@
+package com.revenexx.models
+
+import com.google.gson.annotations.SerializedName
+import com.revenexx.extensions.jsonCast
+
+/**
+ * Memberships List
+ */
+data class MembershipList(
+    /**
+     * List of memberships.
+     */
+    @SerializedName("memberships")
+    val memberships: List<Membership>,
+
+    /**
+     * Total number of memberships that matched your query.
+     */
+    @SerializedName("total")
+    val total: Long,
+
+) {
+    fun toMap(): Map<String, Any> = mapOf(
+        "memberships" to memberships.map { it.toMap() } as Any,
+        "total" to total as Any,
+    )
+
+    companion object {
+
+        @Suppress("UNCHECKED_CAST")
+        fun from(
+            map: Map<String, Any>,
+        ) = MembershipList(
+            memberships = (map["memberships"] as List<Map<String, Any>>).map { Membership.from(map = it) },
+            total = (map["total"] as Number).toLong(),
+        )
+    }
+}

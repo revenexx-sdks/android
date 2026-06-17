@@ -1,0 +1,369 @@
+package com.revenexx.services
+
+import com.revenexx.Service
+import com.revenexx.Client
+import com.revenexx.Channel
+import com.revenexx.Query
+import com.revenexx.exceptions.RevenexxAPIRevenexxException
+import com.revenexx.extensions.forEachAsync
+import com.revenexx.extensions.fromJson
+import com.revenexx.extensions.jsonCast
+import com.revenexx.models.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
+import okhttp3.internal.concurrent.TaskRunner
+import okhttp3.internal.ws.RealWebSocket
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
+import android.util.Log
+import kotlin.coroutines.CoroutineContext
+
+class Realtime(client: Client) : Service(client), CoroutineScope {
+
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    private companion object {
+        private const val TYPE_CONNECTED = "connected"
+        private const val TYPE_ERROR = "error"
+        private const val TYPE_EVENT = "event"
+        private const val TYPE_PONG = "pong"
+        private const val HEARTBEAT_INTERVAL = 20_000L // 20 seconds
+
+        private var socket: RealWebSocket? = null
+        // Slot-centric state: Map<slot, RealtimeCallback>
+        private val activeSubscriptions = ConcurrentHashMap<Int, RealtimeCallback>()
+        // Map slot index -> subscriptionId (from backend)
+        private val slotToSubscriptionId = ConcurrentHashMap<Int, String>()
+        // Inverse map: subscriptionId -> slot index (for O(1) lookup)
+        private val subscriptionIdToSlot = ConcurrentHashMap<String, Int>()
+
+        private var reconnectAttempts = 0
+        private val subscriptionsCounter = AtomicInteger(0)
+        private val socketGeneration = AtomicInteger(0)
+        private var reconnect = true
+        private var heartbeatJob: Job? = null
+
+        // Lock to coordinate multi-map updates (activeSubscriptions, slotToSubscriptionId, subscriptionIdToSlot)
+        private val subscriptionLock = Any()
+    }
+
+    private fun createSocket() {
+        // Serialize socket recreation so subscribe(A), subscribe(B), subscribe(C)
+        // deterministically results in A -> A+B -> A+B+C (sequential updates).
+        val request: Request
+        val newSocket: RealWebSocket?
+        synchronized(subscriptionLock) {
+            // Rebuild activeChannels from all slots
+            val allChannels = mutableSetOf<String>()
+            activeSubscriptions.values.forEach { subscription ->
+                allChannels.addAll(subscription.channels)
+            }
+
+            if (allChannels.isEmpty()) {
+                reconnect = false
+                closeSocket()
+                return
+            }
+
+            val encodedProject = java.net.URLEncoder.encode(client.config["project"].toString(), "UTF-8")
+            var queryParams = "project=$encodedProject"
+
+            allChannels.forEach { channel ->
+                val encodedChannel = java.net.URLEncoder.encode(channel, "UTF-8")
+                queryParams += "&channels[]=$encodedChannel"
+            }
+
+            // Build query string from slots → channels → queries
+            // Format: channel[slot][]=query (each query sent as separate parameter)
+            // For each slot, repeat its queries under each channel it subscribes to
+            // Example: slot 1 → channels [tests, prod], queries [q1, q2]
+            //   Produces: tests[1][]=q1&tests[1][]=q2&prod[1][]=q1&prod[1][]=q2
+            val selectAllQuery = Query.select(listOf("*")).toString()
+            activeSubscriptions.forEach { (slot, subscription) ->
+                // Get queries array - each query is a separate string
+                val queries = if (subscription.queries.isEmpty()) {
+                    listOf(selectAllQuery)
+                } else {
+                    subscription.queries.toList()
+                }
+
+                // Repeat this slot's queries under each channel it subscribes to
+                // Each query is sent as a separate parameter: channel[slot][]=q1&channel[slot][]=q2
+                subscription.channels.forEach { channel ->
+                    val encodedChannel = java.net.URLEncoder.encode(channel, "UTF-8")
+                    queries.forEach { query ->
+                        val encodedQuery = java.net.URLEncoder.encode(query, "UTF-8")
+                        queryParams += "&$encodedChannel[$slot][]=$encodedQuery"
+                    }
+                }
+            }
+
+            val url = "${client.endpointRealtime}/realtime?$queryParams"
+            request = Request.Builder().url(url).build()
+
+            if (socket != null) {
+                reconnect = false
+                closeSocket()
+                // Don't rely on old socket callbacks to flip reconnect back.
+                reconnect = true
+            }
+
+            val generation = socketGeneration.incrementAndGet()
+            newSocket = RealWebSocket(
+                taskRunner = TaskRunner.INSTANCE,
+                originalRequest = request,
+                listener = RevenexxAPIRevenexxWebSocketListener(generation),
+                random = Random(),
+                pingIntervalMillis = client.http.pingIntervalMillis.toLong(),
+                extensions = null,
+                minimumDeflateSize = client.http.minWebSocketMessageToCompress
+            )
+            socket = newSocket
+        }
+
+        newSocket?.connect(client.http)
+    }
+
+    private fun closeSocket() {
+        stopHeartbeat()
+        socket?.close(RealtimeCode.POLICY_VIOLATION.value, null)
+    }
+
+    private fun startHeartbeat() {
+        stopHeartbeat()
+        heartbeatJob = launch {
+            while (isActive) {
+                delay(HEARTBEAT_INTERVAL)
+                socket?.send("""{"type":"ping"}""")
+            }
+        }
+    }
+
+    private fun stopHeartbeat() {
+        heartbeatJob?.cancel()
+        heartbeatJob = null
+    }
+
+    private fun getTimeout() = when {
+        reconnectAttempts < 5 -> 1000L
+        reconnectAttempts < 15 -> 5000L
+        reconnectAttempts < 100 -> 10000L
+        else -> 60000L
+    }
+
+    /**
+     * Convert channel value to string
+     * All Channel instances have toString() method
+     */
+    private fun channelToString(channel: Any): String {
+        return when {
+            channel is String -> channel
+            channel is Channel<*> -> channel.toString()
+            else -> channel.toString()
+        }
+    }
+
+    fun subscribe(
+        vararg channels: Channel<*>,
+        callback: (RealtimeResponseEvent<Any>) -> Unit,
+    ) = subscribe(
+        channels = channels.map { channelToString(it) }.toTypedArray(),
+        payloadType = Any::class.java,
+        callback = callback
+    )
+
+    fun subscribe(
+        vararg channels: String,
+        callback: (RealtimeResponseEvent<Any>) -> Unit,
+    ) = subscribe(
+        channels = channels,
+        payloadType = Any::class.java,
+        callback = callback
+    )
+
+    fun <T> subscribe(
+        vararg channels: Channel<*>,
+        payloadType: Class<T>,
+        queries: Set<String> = emptySet(),
+        callback: (RealtimeResponseEvent<T>) -> Unit,
+    ): RealtimeSubscription {
+        return subscribe(
+            channels = channels.map { channelToString(it) }.toTypedArray(),
+            payloadType = payloadType,
+            queries = queries,
+            callback = callback
+        )
+    }
+
+    fun <T> subscribe(
+        vararg channels: String,
+        payloadType: Class<T>,
+        queries: Set<String> = emptySet(),
+        callback: (RealtimeResponseEvent<T>) -> Unit,
+    ): RealtimeSubscription {
+        // Allocate a new slot index atomically
+        val slot = subscriptionsCounter.incrementAndGet()
+
+        // Store slot-centric data: channels, queries, and callback belong to the slot.
+        // We only touch activeSubscriptions here, but keep the pattern consistent
+        // and future-proof by guarding multi-map writes with a shared lock.
+        synchronized(subscriptionLock) {
+            activeSubscriptions[slot] = RealtimeCallback(
+                channels.toSet(),
+                queries,
+                payloadType,
+                callback as (RealtimeResponseEvent<*>) -> Unit
+            )
+        }
+        // Sequential: rebuild socket immediately for A -> A+B -> A+B+C.
+        createSocket()
+
+        return RealtimeSubscription {
+            // Unsubscribe must update all three maps atomically so that
+            // no reader observes a half-updated state.
+            synchronized(subscriptionLock) {
+                val subscriptionId = slotToSubscriptionId[slot]
+                activeSubscriptions.remove(slot)
+                slotToSubscriptionId.remove(slot)
+                subscriptionId?.let { subscriptionIdToSlot.remove(it) }
+            }
+            // Sequential: rebuild socket immediately after unsubscribe.
+            this@Realtime.createSocket()
+        }
+    }
+
+    // cleanUp is no longer needed - slots are removed directly in subscribe().close()
+    // Channels are automatically rebuilt from remaining slots in createSocket()
+
+    private inner class RevenexxAPIRevenexxWebSocketListener(
+        private val generation: Int
+    ) : WebSocketListener() {
+
+        private fun isStale(webSocket: WebSocket): Boolean {
+            return generation != socketGeneration.get() || webSocket !== socket
+        }
+
+        override fun onOpen(webSocket: WebSocket, response: Response) {
+            super.onOpen(webSocket, response)
+            if (isStale(webSocket)) return
+            reconnectAttempts = 0
+            startHeartbeat()
+        }
+
+        override fun onMessage(webSocket: WebSocket, text: String) {
+            super.onMessage(webSocket, text)
+            if (isStale(webSocket)) return
+
+            launch(IO) {
+                if (isStale(webSocket)) return@launch
+                val message = text.fromJson<RealtimeResponse>()
+                when (message.type) {
+                    TYPE_ERROR -> handleResponseError(message)
+                    TYPE_CONNECTED -> handleResponseConnected(message)
+                    TYPE_EVENT -> handleResponseEvent(message)
+                    TYPE_PONG -> {}
+                }
+            }
+        }
+        
+        private fun handleResponseConnected(message: RealtimeResponse) {
+            val messageData = message.data?.jsonCast<Map<String, Any>>() ?: return
+            val subscriptions = messageData["subscriptions"] as? Map<*, *> ?: return
+
+            // Store subscription ID mappings from backend
+            // Format: { "0": "sub_a1f9", "1": "sub_b83c", ... }
+            synchronized(subscriptionLock) {
+                val newSlotToSub = mutableMapOf<Int, String>()
+                val newSubToSlot = mutableMapOf<String, Int>()
+
+                subscriptions.forEach { (slotStr, subscriptionId) ->
+                    val slot = (slotStr as? String)?.toIntOrNull()
+                    if (slot != null && subscriptionId is String) {
+                        newSlotToSub[slot] = subscriptionId
+                        newSubToSlot[subscriptionId] = slot
+                    }
+                }
+
+                slotToSubscriptionId.clear()
+                slotToSubscriptionId.putAll(newSlotToSub)
+                subscriptionIdToSlot.clear()
+                subscriptionIdToSlot.putAll(newSubToSlot)
+            }
+        }
+
+        private fun handleResponseError(message: RealtimeResponse) {
+            throw message.data?.jsonCast<RevenexxAPIRevenexxException>() ?: RuntimeException("Data is not present")
+        }
+
+        private suspend fun handleResponseEvent(message: RealtimeResponse) {
+            val messageData = message.data?.jsonCast<Map<String, Any>>() ?: return
+            val event = messageData.jsonCast<RealtimeResponseEvent<Any>>()
+            
+            if (event.channels.isEmpty()) {
+                return
+            }
+
+            val rawPayload = event.payload
+            @Suppress("UNCHECKED_CAST")
+            val subscriptions = (messageData["subscriptions"] as? List<*>)?.mapNotNull { it as? String }
+
+            if (subscriptions.isNullOrEmpty()) {
+                return
+            }
+
+            // Use backend-provided subscription IDs for O(1) dispatch
+            subscriptions.forEach { subscriptionId ->
+                // O(1) lookup using subscriptionId
+                val slot = subscriptionIdToSlot[subscriptionId]
+                if (slot != null) {
+                    val subscription = activeSubscriptions[slot]
+                    if (subscription != null) {
+                        val typedEvent = event.copy(
+                            payload = rawPayload.jsonCast(subscription.payloadClass)
+                        )
+                        subscription.callback(typedEvent)
+                    }
+                }
+            }
+        }
+
+        override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+            super.onClosing(webSocket, code, reason)
+            if (isStale(webSocket)) return
+            stopHeartbeat()
+            if (!reconnect || code == RealtimeCode.POLICY_VIOLATION.value) {
+                reconnect = true
+                return
+            }
+
+            val timeout = getTimeout()
+
+            Log.e(
+                this@Realtime::class.java.name,
+                "Realtime disconnected. Re-connecting in ${timeout / 1000} seconds.",
+                RevenexxAPIRevenexxException(reason, code)
+            )
+
+            launch {
+                delay(timeout)
+                reconnectAttempts++
+                createSocket()
+            }
+        }
+
+        override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+            super.onFailure(webSocket, t, response)
+            if (isStale(webSocket)) return
+            stopHeartbeat()
+            t.printStackTrace()
+        }
+    }
+}

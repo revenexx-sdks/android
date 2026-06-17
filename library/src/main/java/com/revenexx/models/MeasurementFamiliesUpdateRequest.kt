@@ -1,0 +1,54 @@
+package com.revenexx.models
+
+import com.google.gson.annotations.SerializedName
+import com.revenexx.extensions.jsonCast
+
+/**
+ * Partial update — omitted fields keep their current value.
+ */
+data class MeasurementFamiliesUpdateRequest(
+    /**
+     * 
+     */
+    @SerializedName("code")
+    var code: String?,
+
+    /**
+     * 
+     */
+    @SerializedName("labels")
+    var labels: Any?,
+
+    /**
+     * 
+     */
+    @SerializedName("standard_unit")
+    var standard_unit: String?,
+
+    /**
+     * 
+     */
+    @SerializedName("units")
+    var units: Any?,
+
+) {
+    fun toMap(): Map<String, Any> = mapOf(
+        "code" to code as Any,
+        "labels" to labels as Any,
+        "standard_unit" to standard_unit as Any,
+        "units" to units as Any,
+    )
+
+    companion object {
+
+        @Suppress("UNCHECKED_CAST")
+        fun from(
+            map: Map<String, Any>,
+        ) = MeasurementFamiliesUpdateRequest(
+            code = map["code"] as? String,
+            labels = map["labels"] as? Any,
+            standard_unit = map["standard_unit"] as? String,
+            units = map["units"] as? Any,
+        )
+    }
+}

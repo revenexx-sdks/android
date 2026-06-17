@@ -1,0 +1,6 @@
+site_name: Revenexx Android
+site_description: "Revenexx Android SDK."
+docs_dir: docs
+
+theme:
+  name: material

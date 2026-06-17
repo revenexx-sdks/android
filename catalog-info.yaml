@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: revenexx-android
+  title: Revenexx Android
+  description: "Revenexx Android SDK for mobile applications."
+  annotations:
+    github.com/project-slug: revenexx-sdks/android
+    backstage.io/techdocs-ref: url:https://github.com/revenexx-sdks/android/tree/main/
+  links:
+    - url: https://github.com/revenexx-sdks/android
+      title: GitHub Repository
+      icon: github
+spec:
+  type: library
+  lifecycle: production
+  owner: group:default/developer-experience
+  system: revenue-cloud
