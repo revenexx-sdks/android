@@ -12,8 +12,8 @@ val orders = Orders(client)
 
 val result = orders.ordersCommentsCreate(
     id = "", 
-    body = "", 
-    author = "", // (optional)
+    body = "Called the customer, delivery agreed for next week.", 
+    author = "service-desk", // (optional)
     visibility = OrderCommentVisibility.INTERNAL, // (optional)
 )
 ```

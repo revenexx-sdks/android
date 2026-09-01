@@ -8,25 +8,25 @@ import com.revenexx.extensions.jsonCast
  */
 data class AssociationTypesUpdateRequest(
     /**
-     * 
+     * The kind of relation between two products. Unique per tenant.
      */
     @SerializedName("code")
     var code: String?,
 
     /**
-     * 
+     * Declares that a relation of this kind carries a quantity — a bundle, a bill of materials. `product_associations.quantity` is where that number goes, and it is meaningless without this flag.
      */
     @SerializedName("is_quantified")
     var is_quantified: Boolean?,
 
     /**
-     * 
+     * Declares the relation symmetric — an accessory of A is an accessory of B. It is a declaration a client reads: this app stores one row per direction and does not create the mirror for you.
      */
     @SerializedName("is_two_way")
     var is_two_way: Boolean?,
 
     /**
-     * 
+     * What the relation is called in a product form, per language tag.
      */
     @SerializedName("labels")
     var labels: Any?,

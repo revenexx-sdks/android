@@ -11,11 +11,11 @@ val pages = Pages(client)
 
 val result = pages.pagesTemplatesUpdate(
     id = "", 
-    description = "", // (optional)
-    field_name = "", // (optional)
-    is_default = false, // (optional)
-    label = "", // (optional)
-    page_bundle = "", // (optional)
+    description = "Full-width hero followed by a two-column teaser row.", // (optional)
+    field_name = "content", // (optional)
+    is_default = true, // (optional)
+    label = "Hero with two teasers", // (optional)
+    page_bundle = "standard", // (optional)
     tree = listOf(), // (optional)
 )
 ```

@@ -12,14 +12,14 @@ Apps apps = new Apps(client);
 apps.appsListExecutions(
     "", // functionId 
     List.of(), // queries (optional)
-    false, // total (optional)
+    true, // total (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

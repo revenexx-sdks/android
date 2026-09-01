@@ -12,11 +12,14 @@ val markets = Markets(client)
 
 val result = markets.marketsUpdate(
     id = "", 
-    code = "", // (optional)
-    currency = "", // (optional)
+    code = "northwind", // (optional)
+    currency = "EUR", // (optional)
     is_default = false, // (optional)
-    labels = mapOf( "a" to "b" ), // (optional)
-    name = "", // (optional)
+    labels = mapOf(
+        "de-DE" to "Nordwind",
+        "en-GB" to "Northwind"
+    ), // (optional)
+    name = "Northwind", // (optional)
     position = 0, // (optional)
     status = MarketStatus.ACTIVE, // (optional)
 )

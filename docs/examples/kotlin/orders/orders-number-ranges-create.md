@@ -10,14 +10,16 @@ val client = Client(context)
 val orders = Orders(client)
 
 val result = orders.ordersNumberRangesCreate(
-    code = "", 
+    code = "order", 
     channel_id = "", // (optional)
-    counter = 0, // (optional)
-    metadata = mapOf( "a" to "b" ), // (optional)
-    padding = 0, // (optional)
-    position_step = 0, // (optional)
-    prefix = "", // (optional)
-    step = 0, // (optional)
+    counter = 123, // (optional)
+    metadata = mapOf(
+        "owner" to "erp-sync"
+    ), // (optional)
+    padding = 6, // (optional)
+    position_step = 10, // (optional)
+    prefix = "ORD-", // (optional)
+    step = 1, // (optional)
     suffix = "", // (optional)
 )
 ```

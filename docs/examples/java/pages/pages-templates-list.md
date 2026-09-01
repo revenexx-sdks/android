@@ -9,12 +9,27 @@ Client client = new Client(context)
 
 Pages pages = new Pages(client);
 
-pages.pagesTemplatesList(new CoroutineCallback<>((result, error) -> {
-    if (error != null) {
-        error.printStackTrace();
-        return;
-    }
+pages.pagesTemplatesList(
+    1, // limit (optional)
+    1, // offset (optional)
+    "created_at.desc", // order (optional)
+    "", // id (optional)
+    "Hero with two teasers", // label (optional)
+    "Full-width hero followed by a two-column teaser row.", // description (optional)
+    "standard", // page_bundle (optional)
+    "content", // field_name (optional)
+    true, // is_default (optional)
+    "", // created_by (optional)
+    "", // created_at (optional)
+    "", // updated_at (optional)
+    new CoroutineCallback<>((result, error) -> {
+        if (error != null) {
+            error.printStackTrace();
+            return;
+        }
 
-    Log.d("RevenexxAPIRevenexx", result.toString());
-}));
+        Log.d("Revenexx", result.toString());
+    })
+);
+
 ```

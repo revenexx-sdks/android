@@ -10,17 +10,17 @@ Client client = new Client(context)
 Avatars avatars = new Avatars(client);
 
 avatars.avatarsGetInitials(
-    "", // name (optional)
-    0, // width (optional)
-    0, // height (optional)
-    "", // background (optional)
+    "Ada Lovelace", // name (optional)
+    1, // width (optional)
+    1, // height (optional)
+    "1a73e8", // background (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

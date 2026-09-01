@@ -11,20 +11,22 @@ Orders orders = new Orders(client);
 
 orders.ordersShip(
     "", // id 
-    "", // carrier (optional)
-    Map.of("a", "b"), // metadata (optional)
-    "", // number (optional)
+    "DHL", // carrier (optional)
+    Map.of(
+        "warehouse", "HAM-1"
+    ), // metadata (optional)
+    "DEL-000123", // number (optional)
     List.of(), // positions (optional)
-    "", // shipped_at (optional)
-    "", // tracking_code (optional)
-    "", // tracking_url (optional)
+    "2026-01-01T12:00:00Z", // shipped_at (optional)
+    "00340434161234567890", // tracking_code (optional)
+    "https://example.com/track/00340434161234567890", // tracking_url (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

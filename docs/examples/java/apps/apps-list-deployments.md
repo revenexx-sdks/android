@@ -13,14 +13,14 @@ apps.appsListDeployments(
     "", // functionId 
     List.of(), // queries (optional)
     "", // search (optional)
-    false, // total (optional)
+    true, // total (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

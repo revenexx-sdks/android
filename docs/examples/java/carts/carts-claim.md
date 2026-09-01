@@ -2,6 +2,7 @@
 import com.revenexx.Client;
 import com.revenexx.coroutines.CoroutineCallback;
 import com.revenexx.services.Carts;
+import com.revenexx.enums.CartMergeStrategy;
 
 Client client = new Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -11,7 +12,8 @@ Carts carts = new Carts(client);
 
 carts.cartsClaim(
     "", // contact_id 
-    "", // session_key 
+    "a1b2c3d4e5f6", // session_key 
+    CartMergeStrategy.MERGE, // strategy (optional)
     "", // target_cart_id (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -19,7 +21,7 @@ carts.cartsClaim(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

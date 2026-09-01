@@ -8,25 +8,25 @@ import com.revenexx.extensions.jsonCast
  */
 data class MeasurementFamiliesUpdateRequest(
     /**
-     * 
+     * The measurement family's stable identifier. A `measure` attribute names one and then offers that family's units.
      */
     @SerializedName("code")
     var code: String?,
 
     /**
-     * 
+     * What the measurement family is called, per language tag.
      */
     @SerializedName("labels")
     var labels: Any?,
 
     /**
-     * 
+     * The unit every value of this family is converted to before it is compared or sorted — the unit each `convert_factor` is relative to.
      */
     @SerializedName("standard_unit")
     var standard_unit: String?,
 
     /**
-     * 
+     * The units this family offers. `convert_factor` multiplies a value into `standard_unit`, so a gram is 0.001 kilograms; `symbol` is what a form prints next to the number.
      */
     @SerializedName("units")
     var units: Any?,

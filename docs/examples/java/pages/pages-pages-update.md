@@ -12,18 +12,18 @@ Pages pages = new Pages(client);
 
 pages.pagesPagesUpdate(
     "", // id 
-    "", // bundle (optional)
+    "standard", // bundle (optional)
     Map.of("a", "b"), // meta (optional)
-    "", // slug (optional)
+    "about-us", // slug (optional)
     PageStatus.DRAFT, // status (optional)
-    "", // title (optional)
+    "About us", // title (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

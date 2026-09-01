@@ -12,11 +12,11 @@ val apps = Apps(client)
 
 val result = apps.appsCreateExecution(
     functionId = "", 
-    async = false, // (optional)
+    async = true, // (optional)
     body = "", // (optional)
     headers = mapOf( "a" to "b" ), // (optional)
     method = method.GET, // (optional)
-    path = "", // (optional)
+    path = "/", // (optional)
     scheduledAt = "", // (optional)
 )
 ```

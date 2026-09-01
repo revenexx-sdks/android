@@ -11,8 +11,8 @@ val pages = Pages(client)
 
 val result = pages.pagesLibraryUpdate(
     id = "", 
-    bundle = "", // (optional)
-    label = "", // (optional)
+    bundle = "teaser", // (optional)
+    label = "Newsletter teaser", // (optional)
     tree = mapOf( "a" to "b" ), // (optional)
 )
 ```

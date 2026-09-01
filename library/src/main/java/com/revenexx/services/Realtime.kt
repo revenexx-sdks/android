@@ -4,7 +4,7 @@ import com.revenexx.Service
 import com.revenexx.Client
 import com.revenexx.Channel
 import com.revenexx.Query
-import com.revenexx.exceptions.RevenexxAPIRevenexxException
+import com.revenexx.exceptions.RevenexxException
 import com.revenexx.extensions.forEachAsync
 import com.revenexx.extensions.fromJson
 import com.revenexx.extensions.jsonCast
@@ -120,7 +120,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
             newSocket = RealWebSocket(
                 taskRunner = TaskRunner.INSTANCE,
                 originalRequest = request,
-                listener = RevenexxAPIRevenexxWebSocketListener(generation),
+                listener = RevenexxWebSocketListener(generation),
                 random = Random(),
                 pingIntervalMillis = client.http.pingIntervalMillis.toLong(),
                 extensions = null,
@@ -243,7 +243,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
     // cleanUp is no longer needed - slots are removed directly in subscribe().close()
     // Channels are automatically rebuilt from remaining slots in createSocket()
 
-    private inner class RevenexxAPIRevenexxWebSocketListener(
+    private inner class RevenexxWebSocketListener(
         private val generation: Int
     ) : WebSocketListener() {
 
@@ -300,7 +300,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
         }
 
         private fun handleResponseError(message: RealtimeResponse) {
-            throw message.data?.jsonCast<RevenexxAPIRevenexxException>() ?: RuntimeException("Data is not present")
+            throw message.data?.jsonCast<RevenexxException>() ?: RuntimeException("Data is not present")
         }
 
         private suspend fun handleResponseEvent(message: RealtimeResponse) {
@@ -349,7 +349,7 @@ class Realtime(client: Client) : Service(client), CoroutineScope {
             Log.e(
                 this@Realtime::class.java.name,
                 "Realtime disconnected. Re-connecting in ${timeout / 1000} seconds.",
-                RevenexxAPIRevenexxException(reason, code)
+                RevenexxException(reason, code)
             )
 
             launch {

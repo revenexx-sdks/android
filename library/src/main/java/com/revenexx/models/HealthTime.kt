@@ -14,7 +14,7 @@ data class HealthTime(
     val diff: Long,
 
     /**
-     * Current unix timestamp of local server where Appwrite runs.
+     * Current unix timestamp of the core service host.
      */
     @SerializedName("localTime")
     val localTime: Long,

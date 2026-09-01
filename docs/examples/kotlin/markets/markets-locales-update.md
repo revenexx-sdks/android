@@ -12,10 +12,10 @@ val markets = Markets(client)
 val result = markets.marketsLocalesUpdate(
     market_id = "", 
     id = "", 
-    code = "", // (optional)
-    country = "", // (optional)
-    is_default = false, // (optional)
-    language = "", // (optional)
+    code = "de-DE", // (optional)
+    country = "DE", // (optional)
+    is_default = true, // (optional)
+    language = "de", // (optional)
     position = 0, // (optional)
 )
 ```

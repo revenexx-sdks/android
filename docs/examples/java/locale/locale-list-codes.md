@@ -15,6 +15,6 @@ locale.localeListCodes(new CoroutineCallback<>((result, error) -> {
         return;
     }
 
-    Log.d("RevenexxAPIRevenexx", result.toString());
+    Log.d("Revenexx", result.toString());
 }));
 ```

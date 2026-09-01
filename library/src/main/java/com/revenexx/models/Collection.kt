@@ -4,115 +4,82 @@ import com.google.gson.annotations.SerializedName
 import com.revenexx.extensions.jsonCast
 
 /**
- * Collection
+ * A Typesense collection definition, passed through from Typesense. `name` is rewritten back to the tenant's public collection name.
  */
-data class Collection(
+data class Collection<T>(
     /**
-     * Collection creation date in ISO 8601 format.
+     * 
      */
-    @SerializedName("\$createdAt")
-    val createdAt: String,
+    @SerializedName("default_sorting_field")
+    var default_sorting_field: String?,
 
     /**
-     * Collection ID.
+     * 
      */
-    @SerializedName("\$id")
-    val id: String,
+    @SerializedName("enable_nested_fields")
+    var enable_nested_fields: Boolean?,
 
     /**
-     * Collection permissions. [Learn more about permissions](https://appwrite.io/docs/permissions).
+     * 
      */
-    @SerializedName("\$permissions")
-    val permissions: List<String>,
+    @SerializedName("fields")
+    var fields: List<CollectionField<T>>?,
 
     /**
-     * Collection update date in ISO 8601 format.
-     */
-    @SerializedName("\$updatedAt")
-    val updatedAt: String,
-
-    /**
-     * Collection attributes.
-     */
-    @SerializedName("attributes")
-    val attributes: List<Any>,
-
-    /**
-     * Maximum document size in bytes. Returns 0 when no limit applies.
-     */
-    @SerializedName("bytesMax")
-    val bytesMax: Long,
-
-    /**
-     * Currently used document size in bytes based on defined attributes.
-     */
-    @SerializedName("bytesUsed")
-    val bytesUsed: Long,
-
-    /**
-     * Database ID.
-     */
-    @SerializedName("databaseId")
-    val databaseId: String,
-
-    /**
-     * Whether document-level permissions are enabled. [Learn more about permissions](https://appwrite.io/docs/permissions).
-     */
-    @SerializedName("documentSecurity")
-    val documentSecurity: Boolean,
-
-    /**
-     * Collection enabled. Can be 'enabled' or 'disabled'. When disabled, the collection is inaccessible to users, but remains accessible to Server SDKs using API keys.
-     */
-    @SerializedName("enabled")
-    val enabled: Boolean,
-
-    /**
-     * Collection indexes.
-     */
-    @SerializedName("indexes")
-    val indexes: List<Index>,
-
-    /**
-     * Collection name.
+     * The public collection name.
      */
     @SerializedName("name")
-    val name: String,
+    var name: String?,
 
+    /**
+     * Documents currently indexed.
+     */
+    @SerializedName("num_documents")
+    var num_documents: Long?,
+
+    /**
+     * Additional properties
+     */
+    @SerializedName("data")
+    val data: T
 ) {
     fun toMap(): Map<String, Any> = mapOf(
-        "\$createdAt" to createdAt as Any,
-        "\$id" to id as Any,
-        "\$permissions" to permissions as Any,
-        "\$updatedAt" to updatedAt as Any,
-        "attributes" to attributes as Any,
-        "bytesMax" to bytesMax as Any,
-        "bytesUsed" to bytesUsed as Any,
-        "databaseId" to databaseId as Any,
-        "documentSecurity" to documentSecurity as Any,
-        "enabled" to enabled as Any,
-        "indexes" to indexes.map { it.toMap() } as Any,
+        "default_sorting_field" to default_sorting_field as Any,
+        "enable_nested_fields" to enable_nested_fields as Any,
+        "fields" to fields?.map { it.toMap() } as Any,
         "name" to name as Any,
+        "num_documents" to num_documents as Any,
+        "data" to data!!.jsonCast(to = Map::class.java)
     )
 
     companion object {
+        operator fun invoke(
+            default_sorting_field: String?,
+            enable_nested_fields: Boolean?,
+            fields: List<CollectionField<Map<String, Any>>>?,
+            name: String?,
+            num_documents: Long?,
+            data: Map<String, Any>
+        ) = Collection<Map<String, Any>>(
+            default_sorting_field,
+            enable_nested_fields,
+            fields,
+            name,
+            num_documents,
+            data
+        )
 
         @Suppress("UNCHECKED_CAST")
-        fun from(
+        fun <T> from(
             map: Map<String, Any>,
-        ) = Collection(
-            createdAt = map["\$createdAt"] as String,
-            id = map["\$id"] as String,
-            permissions = map["\$permissions"] as List<String>,
-            updatedAt = map["\$updatedAt"] as String,
-            attributes = map["attributes"] as List<Any>,
-            bytesMax = (map["bytesMax"] as Number).toLong(),
-            bytesUsed = (map["bytesUsed"] as Number).toLong(),
-            databaseId = map["databaseId"] as String,
-            documentSecurity = map["documentSecurity"] as Boolean,
-            enabled = map["enabled"] as Boolean,
-            indexes = (map["indexes"] as List<Map<String, Any>>).map { Index.from(map = it) },
-            name = map["name"] as String,
+            nestedType: Class<T>
+        ) = Collection<T>(
+            default_sorting_field = map["default_sorting_field"] as? String,
+            enable_nested_fields = map["enable_nested_fields"] as? Boolean,
+            fields = (map["fields"] as List<Map<String, Any>>).map { CollectionField.from(map = it, nestedType) },
+            name = map["name"] as? String,
+            num_documents = (map["num_documents"] as? Number)?.toLong(),
+            data = map["data"]?.jsonCast(to = nestedType) ?: map.jsonCast(to = nestedType)
         )
     }
 }

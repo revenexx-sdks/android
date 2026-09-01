@@ -11,11 +11,14 @@ Client client = new Client(context)
 Markets markets = new Markets(client);
 
 markets.marketsCreate(
-    "", // code 
-    "", // name 
-    "", // currency (optional)
+    "northwind", // code 
+    "Northwind", // name 
+    "EUR", // currency (optional)
     false, // is_default (optional)
-    Map.of("a", "b"), // labels (optional)
+    Map.of(
+        "de-DE", "Nordwind",
+        "en-GB", "Northwind"
+    ), // labels (optional)
     0, // position (optional)
     MarketStatus.ACTIVE, // status (optional)
     new CoroutineCallback<>((result, error) -> {
@@ -24,7 +27,7 @@ markets.marketsCreate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

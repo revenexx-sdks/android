@@ -1,3 +1,2 @@
-rootProject.name = "Appwrite Android SDK"
-include ':example'
+rootProject.name = "Revenexx Android SDK"
 include ':library'

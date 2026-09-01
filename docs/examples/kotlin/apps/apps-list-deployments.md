@@ -13,6 +13,6 @@ val result = apps.appsListDeployments(
     functionId = "", 
     queries = listOf(), // (optional)
     search = "", // (optional)
-    total = false, // (optional)
+    total = true, // (optional)
 )
 ```

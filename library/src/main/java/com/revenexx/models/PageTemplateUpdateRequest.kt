@@ -4,44 +4,44 @@ import com.google.gson.annotations.SerializedName
 import com.revenexx.extensions.jsonCast
 
 /**
- * Partial update — omitted fields keep their current value.
+ * Partial update — omitted fields keep their current value. A template is a COPY source, so changing it never reaches the pages already made from it.
  */
 data class PageTemplateUpdateRequest(
     /**
-     * 
+     * A sentence about when to reach for it, shown next to the label.
      */
     @SerializedName("description")
     var description: String?,
 
     /**
-     * 
+     * The field this template is offered in. Null offers it in every field.
      */
     @SerializedName("field_name")
     var field_name: String?,
 
     /**
-     * 
+     * Whether a new page of this bundle starts from this template.
      */
     @SerializedName("is_default")
     var is_default: Boolean?,
 
     /**
-     * 
+     * What the template is called in the picker.
      */
     @SerializedName("label")
     var label: String?,
 
     /**
-     * 
+     * The page type this template is offered on. Null offers it on every page type.
      */
     @SerializedName("page_bundle")
     var page_bundle: String?,
 
     /**
-     * Serialized block trees ({ bundle, props, props_i18n, options, children }).
+     * The blocks the template inserts, in order. Replaces the stored tree completely.
      */
     @SerializedName("tree")
-    var tree: List<Any>?,
+    var tree: List<PageBlockTree>?,
 
 ) {
     fun toMap(): Map<String, Any> = mapOf(
@@ -50,7 +50,7 @@ data class PageTemplateUpdateRequest(
         "is_default" to is_default as Any,
         "label" to label as Any,
         "page_bundle" to page_bundle as Any,
-        "tree" to tree as Any,
+        "tree" to tree?.map { it.toMap() } as Any,
     )
 
     companion object {
@@ -64,7 +64,7 @@ data class PageTemplateUpdateRequest(
             is_default = map["is_default"] as? Boolean,
             label = map["label"] as? String,
             page_bundle = map["page_bundle"] as? String,
-            tree = map["tree"] as? List<Any>,
+            tree = (map["tree"] as List<Map<String, Any>>).map { PageBlockTree.from(map = it) },
         )
     }
 }

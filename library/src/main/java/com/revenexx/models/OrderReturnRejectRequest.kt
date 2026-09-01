@@ -2,27 +2,28 @@ package com.revenexx.models
 
 import com.google.gson.annotations.SerializedName
 import com.revenexx.extensions.jsonCast
+import com.revenexx.enums.OrderReturnRefusal
 
 /**
  * 
  */
 data class OrderReturnRejectRequest(
     /**
-     * Fallback for 'resolution'.
+     * Free-text fallback for 'resolution' — a sentence about this one return, not a value out of the set.
      */
     @SerializedName("reason")
     var reason: String?,
 
     /**
-     * Why the return was rejected.
+     * Why the return was refused.
      */
     @SerializedName("resolution")
-    var resolution: String?,
+    var resolution: OrderReturnRefusal?,
 
 ) {
     fun toMap(): Map<String, Any> = mapOf(
         "reason" to reason as Any,
-        "resolution" to resolution as Any,
+        "resolution" to resolution?.value as Any,
     )
 
     companion object {
@@ -32,7 +33,7 @@ data class OrderReturnRejectRequest(
             map: Map<String, Any>,
         ) = OrderReturnRejectRequest(
             reason = map["reason"] as? String,
-            resolution = map["resolution"] as? String,
+            resolution = OrderReturnRefusal.values().find { it.value == (map["resolution"] as? String) } ?: null,
         )
     }
 }

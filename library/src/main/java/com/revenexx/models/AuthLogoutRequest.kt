@@ -8,13 +8,13 @@ import com.revenexx.extensions.jsonCast
  */
 data class AuthLogoutRequest(
     /**
-     * 
+     * The session to revoke — `session.$id` from the login.
      */
     @SerializedName("session_id")
     val session_id: String,
 
     /**
-     * 
+     * The platform user — `session.userId` from the login.
      */
     @SerializedName("user_id")
     val user_id: String,

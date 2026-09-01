@@ -11,15 +11,15 @@ Apps apps = new Apps(client);
 
 apps.appsListMarketplace(
     "", // search (optional)
-    0, // per_page (optional)
-    0, // page (optional)
+    1, // per_page (optional)
+    1, // page (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

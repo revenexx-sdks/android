@@ -12,14 +12,14 @@ Apps apps = new Apps(client);
 
 apps.appsGetUsage(
     "", // functionId 
-    Range.24H, // range (optional)
+    Range._24H, // range (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

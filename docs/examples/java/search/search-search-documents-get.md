@@ -11,20 +11,28 @@ Client client = new Client(context)
 Search search = new Search(client);
 
 search.searchSearchDocumentsGet(
-    Collection.GREETINGS, // collection 
+    Collection.PRODUCTS, // collection 
     "", // q (optional)
     "", // query_by (optional)
     "", // filter_by (optional)
     "", // sort_by (optional)
-    0, // page (optional)
-    0, // per_page (optional)
+    "", // facet_by (optional)
+    1, // max_facet_values (optional)
+    "", // group_by (optional)
+    "", // include_fields (optional)
+    "", // exclude_fields (optional)
+    "", // highlight_full_fields (optional)
+    1, // num_typos (optional)
+    "", // prefix (optional)
+    1, // page (optional)
+    1, // per_page (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

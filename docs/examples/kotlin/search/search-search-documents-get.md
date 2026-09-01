@@ -11,12 +11,20 @@ val client = Client(context)
 val search = Search(client)
 
 val result = search.searchSearchDocumentsGet(
-    collection = collection.GREETINGS,
+    collection = collection.PRODUCTS,
     q = "", // (optional)
     query_by = "", // (optional)
     filter_by = "", // (optional)
     sort_by = "", // (optional)
-    page = 0, // (optional)
-    per_page = 0, // (optional)
+    facet_by = "", // (optional)
+    max_facet_values = 1, // (optional)
+    group_by = "", // (optional)
+    include_fields = "", // (optional)
+    exclude_fields = "", // (optional)
+    highlight_full_fields = "", // (optional)
+    num_typos = 1, // (optional)
+    prefix = "", // (optional)
+    page = 1, // (optional)
+    per_page = 1, // (optional)
 )
 ```

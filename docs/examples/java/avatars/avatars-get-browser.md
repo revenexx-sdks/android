@@ -12,16 +12,16 @@ Avatars avatars = new Avatars(client);
 
 avatars.avatarsGetBrowser(
     Code.AA, // code 
-    0, // width (optional)
-    0, // height (optional)
-    0, // quality (optional)
+    1, // width (optional)
+    1, // height (optional)
+    1, // quality (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

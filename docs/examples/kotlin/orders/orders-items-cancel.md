@@ -12,7 +12,7 @@ val orders = Orders(client)
 val result = orders.ordersItemsCancel(
     id = "", 
     positions = listOf(), 
-    cancelled_by = "", // (optional)
-    reason = "", // (optional)
+    cancelled_by = "service-desk", // (optional)
+    reason = "Out of stock, customer agreed", // (optional)
 )
 ```

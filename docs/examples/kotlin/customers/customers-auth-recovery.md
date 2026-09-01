@@ -10,7 +10,7 @@ val client = Client(context)
 val customers = Customers(client)
 
 val result = customers.customersAuthRecovery(
-    email = "", 
-    url = "", 
+    email = "einkauf@example.com", 
+    url = "https://example.com", 
 )
 ```

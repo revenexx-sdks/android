@@ -10,16 +10,16 @@ Client client = new Client(context)
 Avatars avatars = new Avatars(client);
 
 avatars.avatarsGetImage(
-    "", // url 
-    0, // width (optional)
-    0, // height (optional)
+    "https://www.revenexx.com/img/hero-revenexx-poster.webp", // url 
+    1, // width (optional)
+    1, // height (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

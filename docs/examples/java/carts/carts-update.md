@@ -12,17 +12,20 @@ Carts carts = new Carts(client);
 carts.cartsUpdate(
     "", // id 
     "", // channel_id (optional)
-    "", // currency (optional)
-    "", // market_id (optional)
-    Map.of("a", "b"), // metadata (optional)
-    "", // name (optional)
+    "EUR", // currency (optional)
+    Map.of(
+        "campaign", "spring-catalogue",
+        "locale", "de-DE",
+        "source", "storefront"
+    ), // metadata (optional)
+    "Weekly order", // name (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

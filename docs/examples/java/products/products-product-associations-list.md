@@ -9,12 +9,25 @@ Client client = new Client(context)
 
 Products products = new Products(client);
 
-products.productsProductAssociationsList(new CoroutineCallback<>((result, error) -> {
-    if (error != null) {
-        error.printStackTrace();
-        return;
-    }
+products.productsProductAssociationsList(
+    1, // limit (optional)
+    1, // offset (optional)
+    "created_at.desc", // order (optional)
+    "", // id (optional)
+    "", // product_id (optional)
+    "", // association_type_id (optional)
+    "", // target_product_id (optional)
+    9.99, // quantity (optional)
+    1, // position (optional)
+    "2026-01-01T12:00:00Z", // created_at (optional)
+    new CoroutineCallback<>((result, error) -> {
+        if (error != null) {
+            error.printStackTrace();
+            return;
+        }
 
-    Log.d("RevenexxAPIRevenexx", result.toString());
-}));
+        Log.d("Revenexx", result.toString());
+    })
+);
+
 ```

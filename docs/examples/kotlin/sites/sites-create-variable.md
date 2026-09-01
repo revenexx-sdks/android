@@ -13,6 +13,6 @@ val result = sites.sitesCreateVariable(
     siteId = "", 
     key = "", 
     value = "", 
-    secret = false, // (optional)
+    secret = true, // (optional)
 )
 ```

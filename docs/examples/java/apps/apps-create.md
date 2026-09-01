@@ -15,28 +15,28 @@ apps.appsCreate(
     "", // functionId 
     "", // name 
     Runtime.NODE_18_0, // runtime 
-    "", // commands (optional)
-    false, // enabled (optional)
-    "", // entrypoint (optional)
+    "npm install", // commands (optional)
+    true, // enabled (optional)
+    "src/main.js", // entrypoint (optional)
     List.of(), // events (optional)
-    List.of(), // execute (optional)
+    List.of("any"), // execute (optional)
     "", // installationId (optional)
-    false, // logging (optional)
-    "", // providerBranch (optional)
+    true, // logging (optional)
+    "main", // providerBranch (optional)
     "", // providerRepositoryId (optional)
     "", // providerRootDirectory (optional)
-    false, // providerSilentMode (optional)
-    "", // schedule (optional)
+    true, // providerSilentMode (optional)
+    "0 3 * * *", // schedule (optional)
     Scopes.SESSIONS_WRITE, // scopes (optional)
-    "", // specification (optional)
-    0, // timeout (optional)
+    "s-1vcpu-512mb", // specification (optional)
+    1, // timeout (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

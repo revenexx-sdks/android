@@ -11,16 +11,19 @@ Orders orders = new Orders(client);
 
 orders.ordersReturn(
     "", // id 
-    List.of(), // positions 
-    Map.of("a", "b"), // metadata (optional)
-    "", // reason (optional)
+    Map.of(
+        "rma_portal_case", "C-2026-0917"
+    ), // metadata (optional)
+    List.of(), // positions (optional)
+    "Damaged on arrival", // reason (optional)
+    true, // restock (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

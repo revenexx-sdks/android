@@ -11,14 +11,14 @@ Orders orders = new Orders(client);
 
 orders.ordersAcknowledge(
     "", // id 
-    "", // external_ref (optional)
+    "ERP-4711", // external_ref (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

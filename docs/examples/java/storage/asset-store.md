@@ -1,6 +1,7 @@
 ```java
 import com.revenexx.Client;
 import com.revenexx.coroutines.CoroutineCallback;
+import com.revenexx.models.InputFile;
 import com.revenexx.services.Storage;
 import com.revenexx.enums.Visibility;
 
@@ -11,14 +12,14 @@ Client client = new Client(context)
 Storage storage = new Storage(client);
 
 storage.assetStore(
-    "", // file 
+    InputFile.fromPath("file.png"), // file 
     "", // alt_text (optional)
     "", // description (optional)
     "", // display_name (optional)
     "", // folder_id (optional)
-    false, // keep_archive (optional)
+    true, // keep_archive (optional)
     List.of(), // tags (optional)
-    false, // unpack (optional)
+    true, // unpack (optional)
     Visibility.PUBLIC, // visibility (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -26,7 +27,7 @@ storage.assetStore(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

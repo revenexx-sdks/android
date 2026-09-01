@@ -13,14 +13,14 @@ sites.sitesCreateVariable(
     "", // siteId 
     "", // key 
     "", // value 
-    false, // secret (optional)
+    true, // secret (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

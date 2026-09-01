@@ -12,8 +12,8 @@ val markets = Markets(client)
 val result = markets.marketsCurrenciesUpdate(
     market_id = "", 
     id = "", 
-    code = "", // (optional)
-    is_default = false, // (optional)
+    code = "EUR", // (optional)
+    is_default = true, // (optional)
     position = 0, // (optional)
 )
 ```

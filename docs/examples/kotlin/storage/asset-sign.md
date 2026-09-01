@@ -11,6 +11,6 @@ val storage = Storage(client)
 
 val result = storage.assetSign(
     id = "", 
-    ttl_seconds = 0, // (optional)
+    ttl_seconds = 1, // (optional)
 )
 ```

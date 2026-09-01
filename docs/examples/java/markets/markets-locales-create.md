@@ -11,10 +11,10 @@ Markets markets = new Markets(client);
 
 markets.marketsLocalesCreate(
     "", // market_id 
-    "", // code 
-    "", // country 
-    "", // language 
-    false, // is_default (optional)
+    "de-DE", // code 
+    "DE", // country 
+    "de", // language 
+    true, // is_default (optional)
     0, // position (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -22,7 +22,7 @@ markets.marketsLocalesCreate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

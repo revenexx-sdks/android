@@ -9,5 +9,9 @@ val client = Client(context)
 
 val pages = Pages(client)
 
-val result = pages.pagesMenusList()
+val result = pages.pagesMenusList(
+    limit = 1, // (optional)
+    offset = 1, // (optional)
+    order = "created_at.desc", // (optional)
+)
 ```

@@ -11,13 +11,20 @@ Pages pages = new Pages(client);
 
 pages.pagesPagesRevisions(
     "", // id 
+    1, // limit (optional)
+    1, // offset (optional)
+    "created_at.desc", // order (optional)
+    "Autumn campaign", // label (optional)
+    "", // created_by (optional)
+    "", // created_by_name (optional)
+    "", // created_at (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

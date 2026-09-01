@@ -14,16 +14,16 @@ Apps apps = new Apps(client);
 apps.appsListTemplates(
     Runtimes.NODE_18_0, // runtimes (optional)
     UseCases.STARTER, // useCases (optional)
-    0, // limit (optional)
-    0, // offset (optional)
-    false, // total (optional)
+    1, // limit (optional)
+    1, // offset (optional)
+    true, // total (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

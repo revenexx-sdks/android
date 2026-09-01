@@ -11,7 +11,7 @@ Storage storage = new Storage(client);
 
 storage.assetUnpack(
     "", // id 
-    false, // keep_archive (optional)
+    true, // keep_archive (optional)
     "", // target_folder_id (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -19,7 +19,7 @@ storage.assetUnpack(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

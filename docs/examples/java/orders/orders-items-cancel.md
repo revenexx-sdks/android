@@ -12,15 +12,15 @@ Orders orders = new Orders(client);
 orders.ordersItemsCancel(
     "", // id 
     List.of(), // positions 
-    "", // cancelled_by (optional)
-    "", // reason (optional)
+    "service-desk", // cancelled_by (optional)
+    "Out of stock, customer agreed", // reason (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

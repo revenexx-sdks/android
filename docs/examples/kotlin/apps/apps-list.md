@@ -12,6 +12,6 @@ val apps = Apps(client)
 val result = apps.appsList(
     queries = listOf(), // (optional)
     search = "", // (optional)
-    total = false, // (optional)
+    total = true, // (optional)
 )
 ```

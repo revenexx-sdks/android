@@ -11,10 +11,10 @@ Prices prices = new Prices(client);
 
 prices.pricesResolve(
     List.of(), // items 
-    "", // at (optional)
+    "2026-03-15T09:00:00Z", // at (optional)
     "", // channel_id (optional)
     "", // contact_id (optional)
-    "", // currency (optional)
+    "EUR", // currency (optional)
     "", // market_id (optional)
     "", // organization_id (optional)
     new CoroutineCallback<>((result, error) -> {
@@ -23,7 +23,7 @@ prices.pricesResolve(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

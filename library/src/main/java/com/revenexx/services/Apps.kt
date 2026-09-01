@@ -4,7 +4,7 @@ import android.net.Uri
 import com.revenexx.Client
 import com.revenexx.Service
 import com.revenexx.models.*
-import com.revenexx.exceptions.RevenexxAPIRevenexxException
+import com.revenexx.exceptions.RevenexxException
 import com.revenexx.extensions.classOf
 import okhttp3.Cookie
 import java.io.File
@@ -17,7 +17,7 @@ class Apps(client: Client) : Service(client) {
     /**
      * List all Apps in the active project. Pass `search` to filter by name.
      *
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: name, enabled, runtime, deploymentId, schedule, scheduleNext, schedulePrevious, timeout, entrypoint, commands, installationId
+     * @param queries Result filters, paging and ordering. Repeat the parameter once per query — `?queries=…&queries=…` — and make each value a JSON object, e.g. `{"method":"limit","values":[25]}`. The bracketed spellings `queries[]=` and `queries[0]=` are accepted too; the `limit(25)` call syntax is not. See “Query parameters” in this document's introduction. Filterable attributes, besides `$id`, `$createdAt`, `$updatedAt` and `$sequence`: name, enabled, runtime, deploymentId, schedule, scheduleNext, schedulePrevious, timeout, entrypoint, commands, installationId
      * @param search Search term to filter your list results. Max length: 256 chars.
      * @param total When set to false, the total count returned will be 0 and will not be calculated.
      * @return [com.revenexx.models.FunctionList]
@@ -64,8 +64,8 @@ class Apps(client: Client) : Service(client) {
      * @param enabled Is function enabled? When set to 'disabled', users cannot access the function but Server SDKs with and API key can still access the function. No data is lost when this is toggled.
      * @param entrypoint Entrypoint File. This path is relative to the "providerRootDirectory".
      * @param events Events list. Maximum of 100 events are allowed.
-     * @param execute An array of role strings with execution permissions. By default no user is granted with any execute permissions. [learn more about roles](https://appwrite.io/docs/permissions#permission-roles). Maximum of 100 roles are allowed, each 64 characters long.
-     * @param installationId Appwrite Installation ID for VCS (Version Control System) deployment.
+     * @param execute An array of role strings with execution permissions. By default no user is granted with any execute permissions. Roles take the form `any`, `guests`, `users`, `user:<id>`, `team:<id>`, `member:<id>` or `label:<name>`, some of them with a `/<dimension>` suffix such as `users/verified` or `team:<id>/owner`. At most 100 entries. See “Role strings” in this document's introduction.
+     * @param installationId Installation ID of the platform's VCS (Version Control System) integration to deploy from.
      * @param logging When disabled, executions will exclude logs and errors, and will be slightly faster.
      * @param providerBranch Production branch for the repo linked to the function.
      * @param providerRepositoryId Repository ID of the repo linked to the function.
@@ -430,8 +430,8 @@ class Apps(client: Client) : Service(client) {
      * @param enabled Is function enabled? When set to 'disabled', users cannot access the function but Server SDKs with and API key can still access the function. No data is lost when this is toggled.
      * @param entrypoint Entrypoint File. This path is relative to the "providerRootDirectory".
      * @param events Events list. Maximum of 100 events are allowed.
-     * @param execute An array of role strings with execution permissions. By default no user is granted with any execute permissions. [learn more about roles](https://appwrite.io/docs/permissions#permission-roles). Maximum of 100 roles are allowed, each 64 characters long.
-     * @param installationId Appwrite Installation ID for VCS (Version Controle System) deployment.
+     * @param execute An array of role strings with execution permissions. By default no user is granted with any execute permissions. Roles take the form `any`, `guests`, `users`, `user:<id>`, `team:<id>`, `member:<id>` or `label:<name>`, some of them with a `/<dimension>` suffix such as `users/verified` or `team:<id>/owner`. At most 100 entries. See “Role strings” in this document's introduction.
+     * @param installationId Installation ID of the platform's VCS (Version Control System) integration to deploy from.
      * @param logging When disabled, executions will exclude logs and errors, and will be slightly faster.
      * @param providerBranch Production branch for the repo linked to the function
      * @param providerRepositoryId Repository ID of the repo linked to the function
@@ -544,7 +544,7 @@ class Apps(client: Client) : Service(client) {
      * List the deployment history of an App.
      *
      * @param functionId Function ID.
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: buildSize, sourceSize, totalSize, buildDuration, status, activate, type
+     * @param queries Result filters, paging and ordering. Repeat the parameter once per query — `?queries=…&queries=…` — and make each value a JSON object, e.g. `{"method":"limit","values":[25]}`. The bracketed spellings `queries[]=` and `queries[0]=` are accepted too; the `limit(25)` call syntax is not. See “Query parameters” in this document's introduction. Filterable attributes, besides `$id`, `$createdAt`, `$updatedAt` and `$sequence`: buildSize, sourceSize, totalSize, buildDuration, status, activate, type
      * @param search Search term to filter your list results. Max length: 256 chars.
      * @param total When set to false, the total count returned will be 0 and will not be calculated.
      * @return [com.revenexx.models.DeploymentList]
@@ -589,7 +589,7 @@ class Apps(client: Client) : Service(client) {
      *
      * @param functionId Function ID.
      * @param activate Automatically activate the deployment when it is finished building.
-     * @param code Gzip file with your code package. When used with the Appwrite CLI, pass the path to your code directory, and the CLI will automatically package your code. Use a path that is within the current directory.
+     * @param code Your source directory packaged as a gzipped tar archive (`.tar.gz`), sent as the file part of the multipart request.
      * @param commands Build Commands.
      * @param entrypoint Entrypoint File.
      * @return [com.revenexx.models.Deployment]
@@ -598,7 +598,7 @@ class Apps(client: Client) : Service(client) {
     suspend fun appsCreateDeployment(
         functionId: String,
         activate: Boolean,
-        code: String,
+        code: InputFile,
         commands: String? = null,
         entrypoint: String? = null,
         onProgress: ((UploadProgress) -> Unit)? = null
@@ -620,15 +620,16 @@ class Apps(client: Client) : Service(client) {
             com.revenexx.models.Deployment.from(map = it as Map<String, Any>)
         }
         val idParamName: String? = null    
+        val paramName = "code"
         return client.chunkedUpload(
             apiPath,
             apiHeaders,
             apiParams,
             responseType = com.revenexx.models.Deployment::class.java,
-            converter,
-            paramName,
-            idParamName,
-            onProgress,
+            converter = converter,
+            paramName = paramName,
+            idParamName = idParamName,
+            onProgress = onProgress,
         )
     }
 
@@ -736,7 +737,7 @@ class Apps(client: Client) : Service(client) {
     suspend fun appsCreateVcsDeployment(
         functionId: String,
         reference: String,
-        type: com.revenexx.enums.Type,
+        type: com.revenexx.enums.AppsCreateVcsDeploymentType,
         activate: Boolean? = null,
     ): com.revenexx.models.Deployment {
         val apiPath = "/v1/apps/{functionId}/deployments/vcs"
@@ -840,7 +841,7 @@ class Apps(client: Client) : Service(client) {
     suspend fun appsGetDeploymentDownload(
         functionId: String,
         deploymentId: String,
-        type: com.revenexx.enums.Type? = null,
+        type: com.revenexx.enums.AppsGetDeploymentDownloadType? = null,
     ): Any {
         val apiPath = "/v1/apps/{functionId}/deployments/{deploymentId}/download"
             .replace("{functionId}", functionId)
@@ -899,7 +900,7 @@ class Apps(client: Client) : Service(client) {
      * List the execution history of an App.
      *
      * @param functionId Function ID.
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: trigger, status, responseStatusCode, duration, requestMethod, requestPath, deploymentId
+     * @param queries Result filters, paging and ordering. Repeat the parameter once per query — `?queries=…&queries=…` — and make each value a JSON object, e.g. `{"method":"limit","values":[25]}`. The bracketed spellings `queries[]=` and `queries[0]=` are accepted too; the `limit(25)` call syntax is not. See “Query parameters” in this document's introduction. Filterable attributes, besides `$id`, `$createdAt`, `$updatedAt` and `$sequence`: trigger, status, responseStatusCode, duration, requestMethod, requestPath, deploymentId
      * @param total When set to false, the total count returned will be 0 and will not be calculated.
      * @return [com.revenexx.models.ExecutionList]
      */

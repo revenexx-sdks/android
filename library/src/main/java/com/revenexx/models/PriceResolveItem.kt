@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.revenexx.extensions.jsonCast
 
 /**
- * Identify by 'product_id' or 'sku' — an item without identity resolves to on_request with a per-item error.
+ * Identify by 'product_id' or 'sku' — an item without identity resolves to on_request with a per-item error rather than failing the call.
  */
 data class PriceResolveItem(
     /**
@@ -14,13 +14,13 @@ data class PriceResolveItem(
     var product_id: String?,
 
     /**
-     * Requested quantity for tier selection and line_total (default 1; non-positive values fall back to 1).
+     * Requested quantity, counted in the entry’s `unit`. It picks the tier (the highest `quantity_min` at or below it) and multiplies into `line_total`. Default 1; a non-positive value falls back to 1.
      */
     @SerializedName("quantity")
     var quantity: Double?,
 
     /**
-     * SKU to price (alternative to product_id).
+     * SKU to price (alternative to product_id). Matched exactly against the entries’ own `sku`.
      */
     @SerializedName("sku")
     var sku: String?,

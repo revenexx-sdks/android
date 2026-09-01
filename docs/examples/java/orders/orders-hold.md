@@ -11,14 +11,14 @@ Orders orders = new Orders(client);
 
 orders.ordersHold(
     "", // id 
-    "", // reason (optional)
+    "Credit check pending", // reason (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

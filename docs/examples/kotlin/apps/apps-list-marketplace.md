@@ -11,7 +11,7 @@ val apps = Apps(client)
 
 val result = apps.appsListMarketplace(
     search = "", // (optional)
-    per_page = 0, // (optional)
-    page = 0, // (optional)
+    per_page = 1, // (optional)
+    page = 1, // (optional)
 )
 ```

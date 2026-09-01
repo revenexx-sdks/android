@@ -11,10 +11,10 @@ val prices = Prices(client)
 
 val result = prices.pricesResolve(
     items = listOf(), 
-    at = "", // (optional)
+    at = "2026-03-15T09:00:00Z", // (optional)
     channel_id = "", // (optional)
     contact_id = "", // (optional)
-    currency = "", // (optional)
+    currency = "EUR", // (optional)
     market_id = "", // (optional)
     organization_id = "", // (optional)
 )

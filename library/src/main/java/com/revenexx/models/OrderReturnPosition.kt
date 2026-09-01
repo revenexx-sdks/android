@@ -8,7 +8,7 @@ import com.revenexx.extensions.jsonCast
  */
 data class OrderReturnPosition(
     /**
-     * The order item (position) to act on.
+     * The order item (position) to act on. Read the ids from GET /orders/{id} (items[].id) or GET /orders/{id}/shippable (positions[].order_item_id) — an id this order does not carry is a 400.
      */
     @SerializedName("order_item_id")
     val order_item_id: String,

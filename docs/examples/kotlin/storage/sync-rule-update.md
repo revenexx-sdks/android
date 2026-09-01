@@ -11,5 +11,11 @@ val storage = Storage(client)
 
 val result = storage.syncRuleUpdate(
     id = "", 
+    enabled = true, // (optional)
+    options = listOf(), // (optional)
+    schedule = "0 3 * * *", // (optional)
+    sftp_account_id = "", // (optional)
+    source_path = "/uploads", // (optional)
+    target_folder_id = "", // (optional)
 )
 ```

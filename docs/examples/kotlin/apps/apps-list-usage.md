@@ -11,6 +11,6 @@ val client = Client(context)
 val apps = Apps(client)
 
 val result = apps.appsListUsage(
-    range = range.24H, // (optional)
+    range = range._24H, // (optional)
 )
 ```

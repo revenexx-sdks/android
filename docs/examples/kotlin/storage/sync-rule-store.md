@@ -9,5 +9,12 @@ val client = Client(context)
 
 val storage = Storage(client)
 
-val result = storage.syncRuleStore()
+val result = storage.syncRuleStore(
+    sftp_account_id = "", 
+    source_path = "/uploads", 
+    enabled = true, // (optional)
+    options = listOf(), // (optional)
+    schedule = "0 3 * * *", // (optional)
+    target_folder_id = "", // (optional)
+)
 ```

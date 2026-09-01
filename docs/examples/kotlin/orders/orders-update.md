@@ -11,11 +11,35 @@ val orders = Orders(client)
 
 val result = orders.ordersUpdate(
     id = "", 
-    billing_address = mapOf( "a" to "b" ), // (optional)
-    buyer = mapOf( "a" to "b" ), // (optional)
-    customer_order_number = "", // (optional)
-    metadata = mapOf( "a" to "b" ), // (optional)
-    shipping_address = mapOf( "a" to "b" ), // (optional)
-    user_data = mapOf( "a" to "b" ), // (optional)
+    billing_address = mapOf(
+        "city" to "Berlin",
+        "company" to "Beispiel Industrietechnik GmbH",
+        "country" to "DE",
+        "name" to "Anna Berger",
+        "street" to "Musterstraße 12",
+        "zip" to "10115"
+    ), // (optional)
+    buyer = mapOf(
+        "company" to "Beispiel Industrietechnik GmbH",
+        "customer_number" to "K-10042",
+        "email" to "anna.berger@example.com",
+        "name" to "Anna Berger"
+    ), // (optional)
+    customer_order_number = "PO-2026-0042", // (optional)
+    metadata = mapOf(
+        "erp_batch" to "2026-W32"
+    ), // (optional)
+    shipping_address = mapOf(
+        "city" to "Berlin",
+        "company" to "Beispiel Industrietechnik GmbH",
+        "country" to "DE",
+        "name" to "Anna Berger",
+        "street" to "Musterstraße 12",
+        "zip" to "10115"
+    ), // (optional)
+    user_data = mapOf(
+        "campaign" to "spring-catalogue",
+        "source" to "webshop"
+    ), // (optional)
 )
 ```

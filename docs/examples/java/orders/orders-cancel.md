@@ -11,15 +11,15 @@ Orders orders = new Orders(client);
 
 orders.ordersCancel(
     "", // id 
-    "", // cancelled_by (optional)
-    "", // reason (optional)
+    "service-desk", // cancelled_by (optional)
+    "Customer withdrew the order", // reason (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

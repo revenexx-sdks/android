@@ -9,5 +9,11 @@ val client = Client(context)
 
 val pages = Pages(client)
 
-val result = pages.pagesLibraryList()
+val result = pages.pagesLibraryList(
+    limit = 1, // (optional)
+    offset = 1, // (optional)
+    order = "created_at.desc", // (optional)
+    bundles = "hero,teaser", // (optional)
+    text = "hero", // (optional)
+)
 ```

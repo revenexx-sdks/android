@@ -12,14 +12,14 @@ Pages pages = new Pages(client);
 pages.pagesMenusUpdate(
     "", // id 
     List.of(), // items (optional)
-    "", // label (optional)
+    "Main navigation", // label (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

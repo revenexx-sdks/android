@@ -14,25 +14,25 @@ Client client = new Client(context)
 Avatars avatars = new Avatars(client);
 
 avatars.avatarsGetScreenshot(
-    "", // url 
+    "https://example.com", // url 
     Map.of("a", "b"), // headers (optional)
-    0, // viewportWidth (optional)
-    0, // viewportHeight (optional)
-    0, // scale (optional)
+    1, // viewportWidth (optional)
+    1, // viewportHeight (optional)
+    1, // scale (optional)
     Theme.LIGHT, // theme (optional)
-    "", // userAgent (optional)
-    false, // fullpage (optional)
-    "", // locale (optional)
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15", // userAgent (optional)
+    true, // fullpage (optional)
+    "en-US", // locale (optional)
     Timezone.AFRICA_ABIDJAN, // timezone (optional)
-    0, // latitude (optional)
-    0, // longitude (optional)
-    0, // accuracy (optional)
-    false, // touch (optional)
+    9.99, // latitude (optional)
+    9.99, // longitude (optional)
+    9.99, // accuracy (optional)
+    true, // touch (optional)
     Permissions.GEOLOCATION, // permissions (optional)
-    0, // sleep (optional)
-    0, // width (optional)
-    0, // height (optional)
-    0, // quality (optional)
+    1, // sleep (optional)
+    1, // width (optional)
+    1, // height (optional)
+    1, // quality (optional)
     Output.JPG, // output (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -40,7 +40,7 @@ avatars.avatarsGetScreenshot(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

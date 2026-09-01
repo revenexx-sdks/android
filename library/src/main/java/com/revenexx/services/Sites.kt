@@ -4,7 +4,7 @@ import android.net.Uri
 import com.revenexx.Client
 import com.revenexx.Service
 import com.revenexx.models.*
-import com.revenexx.exceptions.RevenexxAPIRevenexxException
+import com.revenexx.exceptions.RevenexxException
 import com.revenexx.extensions.classOf
 import okhttp3.Cookie
 import java.io.File
@@ -17,7 +17,7 @@ class Sites(client: Client) : Service(client) {
     /**
      * Get a list of all the project's sites. You can use the query params to filter your results.
      *
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: name, enabled, framework, deploymentId, buildCommand, installCommand, outputDirectory, installationId
+     * @param queries Result filters, paging and ordering. Repeat the parameter once per query — `?queries=…&queries=…` — and make each value a JSON object, e.g. `{"method":"limit","values":[25]}`. The bracketed spellings `queries[]=` and `queries[0]=` are accepted too; the `limit(25)` call syntax is not. See “Query parameters” in this document's introduction. Filterable attributes, besides `$id`, `$createdAt`, `$updatedAt` and `$sequence`: name, enabled, framework, deploymentId, buildCommand, installCommand, outputDirectory, installationId
      * @param search Search term to filter your list results. Max length: 256 chars.
      * @param total When set to false, the total count returned will be 0 and will not be calculated.
      * @return [com.revenexx.models.SiteList]
@@ -64,7 +64,7 @@ class Sites(client: Client) : Service(client) {
      * @param enabled Is site enabled? When set to 'disabled', users cannot access the site but Server SDKs with and API key can still access the site. No data is lost when this is toggled.
      * @param fallbackFile Fallback file for single page application sites.
      * @param installCommand Install Command.
-     * @param installationId Appwrite Installation ID for VCS (Version Control System) deployment.
+     * @param installationId Installation ID of the platform's VCS (Version Control System) integration to deploy from.
      * @param logging When disabled, request logs will exclude logs and errors, and site responses will be slightly faster.
      * @param outputDirectory Output Directory for site.
      * @param providerBranch Production branch for the repo linked to the site.
@@ -261,7 +261,7 @@ class Sites(client: Client) : Service(client) {
      * @param enabled Is site enabled? When set to 'disabled', users cannot access the site but Server SDKs with and API key can still access the site. No data is lost when this is toggled.
      * @param fallbackFile Fallback file for single page application sites.
      * @param installCommand Install Command.
-     * @param installationId Appwrite Installation ID for VCS (Version Control System) deployment.
+     * @param installationId Installation ID of the platform's VCS (Version Control System) integration to deploy from.
      * @param logging When disabled, request logs will exclude logs and errors, and site responses will be slightly faster.
      * @param outputDirectory Output Directory for site.
      * @param providerBranch Production branch for the repo linked to the site.
@@ -372,7 +372,7 @@ class Sites(client: Client) : Service(client) {
      * Get a list of all the site's code deployments. You can use the query params to filter your results.
      *
      * @param siteId Site ID.
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: buildSize, sourceSize, totalSize, buildDuration, status, activate, type
+     * @param queries Result filters, paging and ordering. Repeat the parameter once per query — `?queries=…&queries=…` — and make each value a JSON object, e.g. `{"method":"limit","values":[25]}`. The bracketed spellings `queries[]=` and `queries[0]=` are accepted too; the `limit(25)` call syntax is not. See “Query parameters” in this document's introduction. Filterable attributes, besides `$id`, `$createdAt`, `$updatedAt` and `$sequence`: buildSize, sourceSize, totalSize, buildDuration, status, activate, type
      * @param search Search term to filter your list results. Max length: 256 chars.
      * @param total When set to false, the total count returned will be 0 and will not be calculated.
      * @return [com.revenexx.models.DeploymentList]
@@ -414,7 +414,7 @@ class Sites(client: Client) : Service(client) {
      *
      * @param siteId Site ID.
      * @param activate Automatically activate the deployment when it is finished building.
-     * @param code Gzip file with your code package. When used with the Appwrite CLI, pass the path to your code directory, and the CLI will automatically package your code. Use a path that is within the current directory.
+     * @param code Your source directory packaged as a gzipped tar archive (`.tar.gz`), sent as the file part of the multipart request.
      * @param buildCommand Build Commands.
      * @param installCommand Install Commands.
      * @param outputDirectory Output Directory.
@@ -424,7 +424,7 @@ class Sites(client: Client) : Service(client) {
     suspend fun sitesCreateDeployment(
         siteId: String,
         activate: Boolean,
-        code: String,
+        code: InputFile,
         buildCommand: String? = null,
         installCommand: String? = null,
         outputDirectory: String? = null,
@@ -448,15 +448,16 @@ class Sites(client: Client) : Service(client) {
             com.revenexx.models.Deployment.from(map = it as Map<String, Any>)
         }
         val idParamName: String? = null    
+        val paramName = "code"
         return client.chunkedUpload(
             apiPath,
             apiHeaders,
             apiParams,
             responseType = com.revenexx.models.Deployment::class.java,
-            converter,
-            paramName,
-            idParamName,
-            onProgress,
+            converter = converter,
+            paramName = paramName,
+            idParamName = idParamName,
+            onProgress = onProgress,
         )
     }
 
@@ -499,7 +500,7 @@ class Sites(client: Client) : Service(client) {
     /**
      * Create a deployment based on a template.
      * 
-     * Use this endpoint with combination of [listTemplates](https://appwrite.io/docs/products/sites/templates) to find the template details.
+     * Unlike app templates, site templates have no listing on this API — that catalogue is the vendor's and is not reproduced here. Take `repository`, `owner`, `rootDirectory` and `reference` from wherever the template is published.
      *
      * @param siteId Site ID.
      * @param owner The name of the owner of the template.
@@ -517,7 +518,7 @@ class Sites(client: Client) : Service(client) {
         reference: String,
         repository: String,
         rootDirectory: String,
-        type: com.revenexx.enums.Type,
+        type: com.revenexx.enums.SitesCreateTemplateDeploymentType,
         activate: Boolean? = null,
     ): com.revenexx.models.Deployment {
         val apiPath = "/v1/sites/{siteId}/deployments/template"
@@ -564,7 +565,7 @@ class Sites(client: Client) : Service(client) {
     suspend fun sitesCreateVcsDeployment(
         siteId: String,
         reference: String,
-        type: com.revenexx.enums.Type,
+        type: com.revenexx.enums.SitesCreateTemplateDeploymentType,
         activate: Boolean? = null,
     ): com.revenexx.models.Deployment {
         val apiPath = "/v1/sites/{siteId}/deployments/vcs"
@@ -668,7 +669,7 @@ class Sites(client: Client) : Service(client) {
     suspend fun sitesGetDeploymentDownload(
         siteId: String,
         deploymentId: String,
-        type: com.revenexx.enums.Type? = null,
+        type: com.revenexx.enums.AppsGetDeploymentDownloadType? = null,
     ): Any {
         val apiPath = "/v1/sites/{siteId}/deployments/{deploymentId}/download"
             .replace("{siteId}", siteId)
@@ -727,7 +728,7 @@ class Sites(client: Client) : Service(client) {
      * Get a list of all site logs. You can use the query params to filter your results.
      *
      * @param siteId Site ID.
-     * @param queries Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of 100 queries are allowed, each 4096 characters long. You may filter on the following attributes: trigger, status, responseStatusCode, duration, requestMethod, requestPath, deploymentId
+     * @param queries Result filters, paging and ordering. Repeat the parameter once per query — `?queries=…&queries=…` — and make each value a JSON object, e.g. `{"method":"limit","values":[25]}`. The bracketed spellings `queries[]=` and `queries[0]=` are accepted too; the `limit(25)` call syntax is not. See “Query parameters” in this document's introduction. Filterable attributes, besides `$id`, `$createdAt`, `$updatedAt` and `$sequence`: trigger, status, responseStatusCode, duration, requestMethod, requestPath, deploymentId
      * @param total When set to false, the total count returned will be 0 and will not be calculated.
      * @return [com.revenexx.models.ExecutionList]
      */

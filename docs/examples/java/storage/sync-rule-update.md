@@ -11,13 +11,19 @@ Storage storage = new Storage(client);
 
 storage.syncRuleUpdate(
     "", // id 
+    true, // enabled (optional)
+    List.of(), // options (optional)
+    "0 3 * * *", // schedule (optional)
+    "", // sftp_account_id (optional)
+    "/uploads", // source_path (optional)
+    "", // target_folder_id (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

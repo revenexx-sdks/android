@@ -17,27 +17,27 @@ sites.sitesUpdate(
     Framework.ANALOG, // framework 
     "", // name 
     Adapter.STATIC, // adapter (optional)
-    "", // buildCommand (optional)
+    "npm run build", // buildCommand (optional)
     BuildRuntime.NODE_18_0, // buildRuntime (optional)
-    false, // enabled (optional)
-    "", // fallbackFile (optional)
-    "", // installCommand (optional)
+    true, // enabled (optional)
+    "index.html", // fallbackFile (optional)
+    "npm install", // installCommand (optional)
     "", // installationId (optional)
-    false, // logging (optional)
+    true, // logging (optional)
     "", // outputDirectory (optional)
-    "", // providerBranch (optional)
+    "main", // providerBranch (optional)
     "", // providerRepositoryId (optional)
     "", // providerRootDirectory (optional)
-    false, // providerSilentMode (optional)
-    "", // specification (optional)
-    0, // timeout (optional)
+    true, // providerSilentMode (optional)
+    "s-1vcpu-512mb", // specification (optional)
+    1, // timeout (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

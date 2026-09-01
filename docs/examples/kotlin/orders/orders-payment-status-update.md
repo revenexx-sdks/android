@@ -13,6 +13,6 @@ val orders = Orders(client)
 val result = orders.ordersPaymentStatusUpdate(
     id = "", 
     status = OrderPaymentStatus.OPEN,
-    payment_id = "", // (optional)
+    payment_id = "pay_000000000001", // (optional)
 )
 ```

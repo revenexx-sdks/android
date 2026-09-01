@@ -20,7 +20,7 @@ data class Bucket(
     val id: String,
 
     /**
-     * Bucket permissions. [Learn more about permissions](https://appwrite.io/docs/permissions).
+     * Bucket permissions. Each entry is a permission string: an action wrapping a role, e.g. `read("any")`, `update("user:abc")`, `delete("team:abc/owner")`. Actions are `read`, `create`, `update`, `delete` and the aggregate `write` (= create + update + delete); the role inside the quotes takes the form described under “Role strings” in this document's introduction.
      */
     @SerializedName("\$permissions")
     val permissions: List<String>,
@@ -62,7 +62,7 @@ data class Bucket(
     val encryption: Boolean,
 
     /**
-     * Whether file-level security is enabled. [Learn more about permissions](https://appwrite.io/docs/permissions).
+     * Whether file-level security is enabled. When it is, each record's own `$permissions` are enforced on top of the container's.
      */
     @SerializedName("fileSecurity")
     val fileSecurity: Boolean,

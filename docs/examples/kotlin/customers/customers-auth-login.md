@@ -10,7 +10,7 @@ val client = Client(context)
 val customers = Customers(client)
 
 val result = customers.customersAuthLogin(
-    email = "", 
+    email = "einkauf@example.com", 
     password = "", 
 )
 ```

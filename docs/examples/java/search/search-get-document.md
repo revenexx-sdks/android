@@ -11,7 +11,7 @@ Client client = new Client(context)
 Search search = new Search(client);
 
 search.searchGetDocument(
-    Collection.GREETINGS, // collection 
+    Collection.PRODUCTS, // collection 
     "", // documentId 
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -19,7 +19,7 @@ search.searchGetDocument(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

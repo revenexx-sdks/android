@@ -2,7 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Apps
-import com.revenexx.enums.Type
+import com.revenexx.enums.AppsCreateVcsDeploymentType
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,8 +12,8 @@ val apps = Apps(client)
 
 val result = apps.appsCreateVcsDeployment(
     functionId = "", 
-    reference = "", 
-    type = type.BRANCH,
-    activate = false, // (optional)
+    reference = "main", 
+    type = AppsCreateVcsDeploymentType.BRANCH,
+    activate = true, // (optional)
 )
 ```

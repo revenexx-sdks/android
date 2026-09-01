@@ -11,7 +11,7 @@ data class MessageList(
      * List of messages.
      */
     @SerializedName("messages")
-    val messages: List<Message>,
+    val messages: List<Message2>,
 
     /**
      * Total number of messages that matched your query.
@@ -31,7 +31,7 @@ data class MessageList(
         fun from(
             map: Map<String, Any>,
         ) = MessageList(
-            messages = (map["messages"] as List<Map<String, Any>>).map { Message.from(map = it) },
+            messages = (map["messages"] as List<Map<String, Any>>).map { Message2.from(map = it) },
             total = (map["total"] as Number).toLong(),
         )
     }

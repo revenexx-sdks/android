@@ -14,8 +14,8 @@ val apps = Apps(client)
 val result = apps.appsListTemplates(
     runtimes = runtimes.NODE_18_0, // (optional)
     useCases = useCases.STARTER, // (optional)
-    limit = 0, // (optional)
-    offset = 0, // (optional)
-    total = false, // (optional)
+    limit = 1, // (optional)
+    offset = 1, // (optional)
+    total = true, // (optional)
 )
 ```

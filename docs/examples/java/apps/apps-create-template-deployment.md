@@ -17,14 +17,14 @@ apps.appsCreateTemplateDeployment(
     "", // repository 
     "", // rootDirectory 
     Type.COMMIT, // type 
-    false, // activate (optional)
+    true, // activate (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

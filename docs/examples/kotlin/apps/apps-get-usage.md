@@ -12,6 +12,6 @@ val apps = Apps(client)
 
 val result = apps.appsGetUsage(
     functionId = "", 
-    range = range.24H, // (optional)
+    range = range._24H, // (optional)
 )
 ```

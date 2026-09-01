@@ -11,11 +11,14 @@ val client = Client(context)
 val markets = Markets(client)
 
 val result = markets.marketsCreate(
-    code = "", 
-    name = "", 
-    currency = "", // (optional)
+    code = "northwind", 
+    name = "Northwind", 
+    currency = "EUR", // (optional)
     is_default = false, // (optional)
-    labels = mapOf( "a" to "b" ), // (optional)
+    labels = mapOf(
+        "de-DE" to "Nordwind",
+        "en-GB" to "Northwind"
+    ), // (optional)
     position = 0, // (optional)
     status = MarketStatus.ACTIVE, // (optional)
 )

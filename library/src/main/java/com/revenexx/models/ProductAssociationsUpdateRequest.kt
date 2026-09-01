@@ -8,31 +8,31 @@ import com.revenexx.extensions.jsonCast
  */
 data class ProductAssociationsUpdateRequest(
     /**
-     * 
+     * Which kind of relation this is — the `association_types` row.
      */
     @SerializedName("association_type_id")
     var association_type_id: String?,
 
     /**
-     * 
+     * Order in which the targets are shown, ascending.
      */
     @SerializedName("position")
     var position: Long?,
 
     /**
-     * 
+     * The product the relation starts at — the one whose detail page shows it.
      */
     @SerializedName("product_id")
     var product_id: String?,
 
     /**
-     * 
+     * How many of the target belong to the source — the 4 in "this bundle contains 4 casters". Only meaningful when the association type carries `is_quantified`; null on an ordinary cross-sell.
      */
     @SerializedName("quantity")
     var quantity: Double?,
 
     /**
-     * 
+     * The product the relation points at — the accessory, the spare part, the cross-sell.
      */
     @SerializedName("target_product_id")
     var target_product_id: String?,

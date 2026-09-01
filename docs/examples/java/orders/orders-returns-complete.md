@@ -2,6 +2,7 @@
 import com.revenexx.Client;
 import com.revenexx.coroutines.CoroutineCallback;
 import com.revenexx.services.Orders;
+import com.revenexx.enums.OrderReturnSettlement;
 
 Client client = new Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,14 +13,14 @@ Orders orders = new Orders(client);
 orders.ordersReturnsComplete(
     "", // id 
     "", // rid 
-    "", // resolution (optional)
+    OrderReturnSettlement.REFUND, // resolution (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

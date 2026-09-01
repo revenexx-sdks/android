@@ -17,6 +17,6 @@ val result = apps.appsCreateTemplateDeployment(
     repository = "", 
     rootDirectory = "", 
     type = type.COMMIT,
-    activate = false, // (optional)
+    activate = true, // (optional)
 )
 ```
