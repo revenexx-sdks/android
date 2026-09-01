@@ -10,11 +10,11 @@ val client = Client(context)
 val pages = Pages(client)
 
 val result = pages.pagesPagesCreate(
-    title = "", 
-    bundle = "", // (optional)
+    title = "About us", 
+    bundle = "standard", // (optional)
     hostOptions = mapOf( "a" to "b" ), // (optional)
     meta = mapOf( "a" to "b" ), // (optional)
-    slug = "", // (optional)
-    sourceLanguage = "", // (optional)
+    slug = "about-us", // (optional)
+    sourceLanguage = "de", // (optional)
 )
 ```

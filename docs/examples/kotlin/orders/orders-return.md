@@ -11,8 +11,11 @@ val orders = Orders(client)
 
 val result = orders.ordersReturn(
     id = "", 
-    positions = listOf(), 
-    metadata = mapOf( "a" to "b" ), // (optional)
-    reason = "", // (optional)
+    metadata = mapOf(
+        "rma_portal_case" to "C-2026-0917"
+    ), // (optional)
+    positions = listOf(), // (optional)
+    reason = "Damaged on arrival", // (optional)
+    restock = true, // (optional)
 )
 ```

@@ -10,9 +10,9 @@ val client = Client(context)
 val avatars = Avatars(client)
 
 val result = avatars.avatarsGetInitials(
-    name = "", // (optional)
-    width = 0, // (optional)
-    height = 0, // (optional)
-    background = "", // (optional)
+    name = "Ada Lovelace", // (optional)
+    width = 1, // (optional)
+    height = 1, // (optional)
+    background = "1a73e8", // (optional)
 )
 ```

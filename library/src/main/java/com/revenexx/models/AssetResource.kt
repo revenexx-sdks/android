@@ -94,6 +94,12 @@ data class AssetResource(
     /**
      * 
      */
+    @SerializedName("model_url")
+    val model_url: String,
+
+    /**
+     * 
+     */
     @SerializedName("original_name")
     val original_name: String,
 
@@ -108,6 +114,12 @@ data class AssetResource(
      */
     @SerializedName("path_name")
     val path_name: String,
+
+    /**
+     * 3D derivatives (null unless rendered): preview image + .glb mesh.
+     */
+    @SerializedName("preview_url")
+    val preview_url: String,
 
     /**
      * 
@@ -146,10 +158,17 @@ data class AssetResource(
     val updated_at: String,
 
     /**
-     * 
+     * Null for a private asset — it is only reachable through a signed
+     * URL, so there is no path-addressed public URL to hand out.
      */
     @SerializedName("url")
     val url: String,
+
+    /**
+     * 
+     */
+    @SerializedName("usdz_url")
+    val usdz_url: String,
 
     /**
      * 
@@ -179,9 +198,11 @@ data class AssetResource(
         "kind" to kind as Any,
         "metadata" to metadata as Any,
         "mime_type" to mime_type as Any,
+        "model_url" to model_url as Any,
         "original_name" to original_name as Any,
         "page_count" to page_count as Any,
         "path_name" to path_name as Any,
+        "preview_url" to preview_url as Any,
         "processed_at" to processed_at as Any,
         "size_bytes" to size_bytes as Any,
         "status" to status as Any,
@@ -189,6 +210,7 @@ data class AssetResource(
         "tenant_id" to tenant_id as Any,
         "updated_at" to updated_at as Any,
         "url" to url as Any,
+        "usdz_url" to usdz_url as Any,
         "visibility" to visibility as Any,
         "width" to width as Any,
     )
@@ -213,9 +235,11 @@ data class AssetResource(
             kind = map["kind"] as String,
             metadata = map["metadata"] as List<Any>,
             mime_type = map["mime_type"] as String,
+            model_url = map["model_url"] as String,
             original_name = map["original_name"] as String,
             page_count = (map["page_count"] as Number).toLong(),
             path_name = map["path_name"] as String,
+            preview_url = map["preview_url"] as String,
             processed_at = map["processed_at"] as String,
             size_bytes = (map["size_bytes"] as Number).toLong(),
             status = map["status"] as String,
@@ -223,6 +247,7 @@ data class AssetResource(
             tenant_id = map["tenant_id"] as String,
             updated_at = map["updated_at"] as String,
             url = map["url"] as String,
+            usdz_url = map["usdz_url"] as String,
             visibility = map["visibility"] as String,
             width = (map["width"] as Number).toLong(),
         )

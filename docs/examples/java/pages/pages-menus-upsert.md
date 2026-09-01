@@ -10,8 +10,8 @@ Client client = new Client(context)
 Pages pages = new Pages(client);
 
 pages.pagesMenusUpsert(
-    "", // label 
-    "", // menuKey 
+    "Main navigation", // label 
+    "main", // menuKey 
     List.of(), // items (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -19,7 +19,7 @@ pages.pagesMenusUpsert(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

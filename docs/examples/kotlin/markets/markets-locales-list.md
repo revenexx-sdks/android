@@ -11,5 +11,15 @@ val markets = Markets(client)
 
 val result = markets.marketsLocalesList(
     market_id = "", 
+    id = "", // (optional)
+    code = "de-DE", // (optional)
+    language = "de", // (optional)
+    country = "DE", // (optional)
+    is_default = true, // (optional)
+    position = 0, // (optional)
+    created_at = "2026-01-01T12:00:00Z", // (optional)
+    limit = 50, // (optional)
+    offset = 0, // (optional)
+    order = "position.asc", // (optional)
 )
 ```

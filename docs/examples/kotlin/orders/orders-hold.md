@@ -11,6 +11,6 @@ val orders = Orders(client)
 
 val result = orders.ordersHold(
     id = "", 
-    reason = "", // (optional)
+    reason = "Credit check pending", // (optional)
 )
 ```

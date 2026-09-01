@@ -12,8 +12,8 @@ Orders orders = new Orders(client);
 
 orders.ordersCommentsCreate(
     "", // id 
-    "", // body 
-    "", // author (optional)
+    "Called the customer, delivery agreed for next week.", // body 
+    "service-desk", // author (optional)
     OrderCommentVisibility.INTERNAL, // visibility (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -21,7 +21,7 @@ orders.ordersCommentsCreate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

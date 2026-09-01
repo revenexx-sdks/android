@@ -1,6 +1,7 @@
 ```java
 import com.revenexx.Client;
 import com.revenexx.coroutines.CoroutineCallback;
+import com.revenexx.models.InputFile;
 import com.revenexx.services.Sites;
 
 Client client = new Client(context)
@@ -11,8 +12,8 @@ Sites sites = new Sites(client);
 
 sites.sitesCreateDeployment(
     "", // siteId 
-    false, // activate 
-    "", // code 
+    true, // activate 
+    InputFile.fromPath("file.png"), // code 
     "", // buildCommand (optional)
     "", // installCommand (optional)
     "", // outputDirectory (optional)
@@ -22,7 +23,7 @@ sites.sitesCreateDeployment(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

@@ -2,6 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Pages
+import com.revenexx.enums.PageStatus
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -9,5 +10,12 @@ val client = Client(context)
 
 val pages = Pages(client)
 
-val result = pages.pagesPagesList()
+val result = pages.pagesPagesList(
+    limit = 1, // (optional)
+    offset = 1, // (optional)
+    order = "created_at.desc", // (optional)
+    bundle = "standard", // (optional)
+    status = PageStatus.DRAFT, // (optional)
+    q = "contact", // (optional)
+)
 ```

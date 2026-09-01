@@ -2,7 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Apps
-import com.revenexx.enums.Type
+import com.revenexx.enums.AppsGetDeploymentDownloadType
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -13,6 +13,6 @@ val apps = Apps(client)
 val result = apps.appsGetDeploymentDownload(
     functionId = "", 
     deploymentId = "", 
-    type = type.SOURCE, // (optional)
+    type = AppsGetDeploymentDownloadType.SOURCE, // (optional)
 )
 ```

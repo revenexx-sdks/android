@@ -3,7 +3,7 @@ import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Channels
 import com.revenexx.enums.ChannelStatus
-import com.revenexx.enums.ChannelType
+import com.revenexx.enums.ChannelUnassignedVisibility
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,12 +12,16 @@ val client = Client(context)
 val channels = Channels(client)
 
 val result = channels.channelsCreate(
-    code = "", 
-    name = "", 
-    is_default = false, // (optional)
-    labels = mapOf( "a" to "b" ), // (optional)
-    position = 0, // (optional)
+    code = "shop", 
+    name = "Shop", 
+    is_default = true, // (optional)
+    labels = mapOf(
+        "de" to "Shop",
+        "en" to "Shop"
+    ), // (optional)
+    position = 1, // (optional)
     status = ChannelStatus.ACTIVE, // (optional)
-    type = ChannelType.STOREFRONT, // (optional)
+    type = "storefront", // (optional)
+    unassigned_visibility = ChannelUnassignedVisibility.INHERIT, // (optional)
 )
 ```

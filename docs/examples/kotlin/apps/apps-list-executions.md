@@ -12,6 +12,6 @@ val apps = Apps(client)
 val result = apps.appsListExecutions(
     functionId = "", 
     queries = listOf(), // (optional)
-    total = false, // (optional)
+    total = true, // (optional)
 )
 ```

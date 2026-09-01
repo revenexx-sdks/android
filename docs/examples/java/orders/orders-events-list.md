@@ -11,13 +11,20 @@ Orders orders = new Orders(client);
 
 orders.ordersEventsList(
     "", // id 
+    "", // id_query (optional)
+    "order.shipment.created", // name (optional)
+    "", // actor (optional)
+    "2026-01-01T12:00:00Z", // created_at (optional)
+    50, // limit (optional)
+    0, // offset (optional)
+    "created_at.desc", // order (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

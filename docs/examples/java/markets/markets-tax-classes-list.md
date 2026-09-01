@@ -11,13 +11,25 @@ Markets markets = new Markets(client);
 
 markets.marketsTaxClassesList(
     "", // market_id 
+    "", // id (optional)
+    "standard", // code (optional)
+    "Standard rate", // name (optional)
+    "{"de-DE":"Regelsatz","en-GB":"Standard rate"}", // labels (optional)
+    20, // rate (optional)
+    true, // is_default (optional)
+    0, // position (optional)
+    "2026-01-01T12:00:00Z", // created_at (optional)
+    "2026-01-01T12:00:00Z", // updated_at (optional)
+    50, // limit (optional)
+    0, // offset (optional)
+    "position.asc", // order (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

@@ -11,14 +11,14 @@ Storage storage = new Storage(client);
 
 storage.folderDestroy(
     "", // id 
-    false, // recursive (optional)
+    true, // recursive (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

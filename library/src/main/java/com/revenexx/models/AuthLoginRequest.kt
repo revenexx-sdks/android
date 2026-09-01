@@ -8,13 +8,13 @@ import com.revenexx.extensions.jsonCast
  */
 data class AuthLoginRequest(
     /**
-     * 
+     * The buyer's login address — the same one the contact carries.
      */
     @SerializedName("email")
     val email: String,
 
     /**
-     * 
+     * The password from registration or recovery. Wrong credentials are a 401; a correct one on an undecided application is a 403.
      */
     @SerializedName("password")
     val password: String,

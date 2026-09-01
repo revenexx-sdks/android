@@ -9,5 +9,16 @@ val client = Client(context)
 
 val products = Products(client)
 
-val result = products.productsProductAssociationsList()
+val result = products.productsProductAssociationsList(
+    limit = 1, // (optional)
+    offset = 1, // (optional)
+    order = "created_at.desc", // (optional)
+    id = "", // (optional)
+    product_id = "", // (optional)
+    association_type_id = "", // (optional)
+    target_product_id = "", // (optional)
+    quantity = 9.99, // (optional)
+    position = 1, // (optional)
+    created_at = "2026-01-01T12:00:00Z", // (optional)
+)
 ```

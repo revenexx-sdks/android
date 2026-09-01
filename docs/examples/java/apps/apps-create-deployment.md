@@ -1,6 +1,7 @@
 ```java
 import com.revenexx.Client;
 import com.revenexx.coroutines.CoroutineCallback;
+import com.revenexx.models.InputFile;
 import com.revenexx.services.Apps;
 
 Client client = new Client(context)
@@ -11,8 +12,8 @@ Apps apps = new Apps(client);
 
 apps.appsCreateDeployment(
     "", // functionId 
-    false, // activate 
-    "", // code 
+    true, // activate 
+    InputFile.fromPath("file.png"), // code 
     "", // commands (optional)
     "", // entrypoint (optional)
     new CoroutineCallback<>((result, error) -> {
@@ -21,7 +22,7 @@ apps.appsCreateDeployment(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

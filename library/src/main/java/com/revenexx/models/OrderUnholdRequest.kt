@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.revenexx.extensions.jsonCast
 
 /**
- * No payload — releasing the hold is a pure state transition.
+ * No payload — releasing the hold is a pure state transition, and it clears hold_reason with it. Send {}.
  */
 class OrderUnholdRequest(
 ) {

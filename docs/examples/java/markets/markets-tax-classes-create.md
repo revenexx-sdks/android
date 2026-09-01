@@ -11,19 +11,22 @@ Markets markets = new Markets(client);
 
 markets.marketsTaxClassesCreate(
     "", // market_id 
-    "", // code 
-    "", // name 
-    false, // is_default (optional)
-    Map.of("a", "b"), // labels (optional)
+    "standard", // code 
+    "Standard rate", // name 
+    true, // is_default (optional)
+    Map.of(
+        "de-DE", "Regelsatz",
+        "en-GB", "Standard rate"
+    ), // labels (optional)
     0, // position (optional)
-    0, // rate (optional)
+    20, // rate (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

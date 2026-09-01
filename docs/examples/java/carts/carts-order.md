@@ -11,14 +11,14 @@ Carts carts = new Carts(client);
 
 carts.cartsOrder(
     "", // id 
-    "", // order_ref (optional)
+    "SO-10042", // order_ref (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

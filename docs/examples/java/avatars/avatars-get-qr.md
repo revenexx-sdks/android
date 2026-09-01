@@ -11,16 +11,16 @@ Avatars avatars = new Avatars(client);
 
 avatars.avatarsGetQR(
     "", // text 
-    0, // size (optional)
-    0, // margin (optional)
-    false, // download (optional)
+    1, // size (optional)
+    1, // margin (optional)
+    true, // download (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

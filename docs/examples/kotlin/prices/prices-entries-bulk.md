@@ -2,6 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Prices
+import com.revenexx.enums.PriceEntriesBulkMode
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,5 +13,6 @@ val prices = Prices(client)
 val result = prices.pricesEntriesBulk(
     list_id = "", 
     entries = listOf(), 
+    mode = PriceEntriesBulkMode.UPSERT, // (optional)
 )
 ```

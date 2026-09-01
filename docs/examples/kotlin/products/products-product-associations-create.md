@@ -13,7 +13,7 @@ val result = products.productsProductAssociationsCreate(
     association_type_id = "", 
     product_id = "", 
     target_product_id = "", 
-    position = 0, // (optional)
-    quantity = 0, // (optional)
+    position = 1, // (optional)
+    quantity = 4, // (optional)
 )
 ```

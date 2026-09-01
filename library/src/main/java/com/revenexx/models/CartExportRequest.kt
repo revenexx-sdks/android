@@ -9,13 +9,13 @@ import com.revenexx.enums.CartExportFormat
  */
 data class CartExportRequest(
     /**
-     * Ad-hoc export format (only without profile_id).
+     * Format of an ad-hoc export, read only when no profile_id is sent. 'json' returns the whole `{cart, items}` document, 'csv' the lines alone. Default 'json'.
      */
     @SerializedName("format")
     var format: CartExportFormat?,
 
     /**
-     * Export profile to run; ad-hoc JSON/CSV export when omitted.
+     * The export profile to run — one of the ids `GET /carts/io/profiles?direction=export` lists. Omit it for an ad-hoc export in the canonical shape, which is what `format` is for.
      */
     @SerializedName("profile_id")
     var profile_id: String?,

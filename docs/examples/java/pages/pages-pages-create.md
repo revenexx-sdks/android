@@ -10,19 +10,19 @@ Client client = new Client(context)
 Pages pages = new Pages(client);
 
 pages.pagesPagesCreate(
-    "", // title 
-    "", // bundle (optional)
+    "About us", // title 
+    "standard", // bundle (optional)
     Map.of("a", "b"), // hostOptions (optional)
     Map.of("a", "b"), // meta (optional)
-    "", // slug (optional)
-    "", // sourceLanguage (optional)
+    "about-us", // slug (optional)
+    "de", // sourceLanguage (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

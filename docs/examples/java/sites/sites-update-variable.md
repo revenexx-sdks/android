@@ -13,7 +13,7 @@ sites.sitesUpdateVariable(
     "", // siteId 
     "", // variableId 
     "", // key 
-    false, // secret (optional)
+    true, // secret (optional)
     "", // value (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -21,7 +21,7 @@ sites.sitesUpdateVariable(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

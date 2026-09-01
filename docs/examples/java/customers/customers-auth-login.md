@@ -10,7 +10,7 @@ Client client = new Client(context)
 Customers customers = new Customers(client);
 
 customers.customersAuthLogin(
-    "", // email 
+    "einkauf@example.com", // email 
     "", // password 
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -18,7 +18,7 @@ customers.customersAuthLogin(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

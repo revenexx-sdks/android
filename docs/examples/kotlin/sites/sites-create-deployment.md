@@ -1,6 +1,7 @@
 ```kotlin
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
+import com.revenexx.models.InputFile
 import com.revenexx.services.Sites
 
 val client = Client(context)
@@ -11,8 +12,8 @@ val sites = Sites(client)
 
 val result = sites.sitesCreateDeployment(
     siteId = "", 
-    activate = false, 
-    code = "", 
+    activate = true, 
+    code = InputFile.fromPath("file.png"), 
     buildCommand = "", // (optional)
     installCommand = "", // (optional)
     outputDirectory = "", // (optional)

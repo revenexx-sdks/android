@@ -2,6 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Orders
+import com.revenexx.enums.OrderReturnRefusal
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,7 +13,7 @@ val orders = Orders(client)
 val result = orders.ordersReturnsReject(
     id = "", 
     rid = "", 
-    reason = "", // (optional)
-    resolution = "", // (optional)
+    reason = "Returned outside the agreed window", // (optional)
+    resolution = OrderReturnRefusal.WEAR_AND_TEAR, // (optional)
 )
 ```

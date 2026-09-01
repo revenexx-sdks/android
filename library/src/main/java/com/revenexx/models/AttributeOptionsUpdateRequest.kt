@@ -8,31 +8,31 @@ import com.revenexx.extensions.jsonCast
  */
 data class AttributeOptionsUpdateRequest(
     /**
-     * 
+     * The select / multi-select attribute these are the permitted values of. Deleting the attribute deletes its options with it.
      */
     @SerializedName("attribute_id")
     var attribute_id: String?,
 
     /**
-     * 
+     * The value actually STORED in a record's `attribute_values` when this option is picked — never the label. Unique within the attribute.
      */
     @SerializedName("code")
     var code: String?,
 
     /**
-     * 
+     * What the option is called, per language tag. Two tenants may label the same code differently; only the code is ever written into a record.
      */
     @SerializedName("labels")
     var labels: Any?,
 
     /**
-     * 
+     * Order in the dropdown, ascending. Options that tie keep the order the database returns them in, so give every option a position if the order matters.
      */
     @SerializedName("position")
     var position: Long?,
 
     /**
-     * 
+     * A colour or texture chip for the picker. Null for an option that is not visual.
      */
     @SerializedName("swatch")
     var swatch: Any?,

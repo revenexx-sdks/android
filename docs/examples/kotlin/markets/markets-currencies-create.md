@@ -11,8 +11,8 @@ val markets = Markets(client)
 
 val result = markets.marketsCurrenciesCreate(
     market_id = "", 
-    code = "", 
-    is_default = false, // (optional)
+    code = "EUR", 
+    is_default = true, // (optional)
     position = 0, // (optional)
 )
 ```

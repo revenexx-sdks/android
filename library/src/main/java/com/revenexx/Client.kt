@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.revenexx.cookies.ListenableCookieJar
 import com.revenexx.cookies.stores.SharedPreferencesCookieStore
-import com.revenexx.exceptions.RevenexxAPIRevenexxException
+import com.revenexx.exceptions.RevenexxException
 import com.revenexx.extensions.fromJson
 import com.revenexx.extensions.toJson
 import com.revenexx.models.InputFile
@@ -82,12 +82,12 @@ class Client @JvmOverloads constructor(
     init {
         headers = mutableMapOf(
             "content-type" to "application/json",
-            "origin" to "revenexx api — revenexx-android://${context.packageName}",
+            "origin" to "revenexx-android://${context.packageName}",
             "user-agent" to "${context.packageName}/${appVersion}, ${System.getProperty("http.agent")}",
             "x-sdk-name" to "Revenexx Android",
             "x-sdk-platform" to "",
             "x-sdk-language" to "android",
-            "x-sdk-version" to "0.0.1"
+            "x-sdk-version" to "1.9.11"
 
         )
         config = mutableMapOf()
@@ -226,6 +226,21 @@ class Client @JvmOverloads constructor(
     }
 
     /**
+     * Set Market
+     *
+     * The market slug to scope requests to, sent as the X-Revenexx-Market
+     * header. Optional - omit it to see only global rows.
+     *
+     * @param value
+     *
+     * @return this
+     */
+    fun setMarket(value: String): Client {
+        addHeader("X-Revenexx-Market", value)
+        return this
+    }
+
+    /**
      * Add Header
      *
      * @param key
@@ -267,7 +282,7 @@ class Client @JvmOverloads constructor(
      *
      * @return [T]
      */
-    @Throws(RevenexxAPIRevenexxException::class)
+    @Throws(RevenexxException::class)
     suspend fun <T> call(
         method: String,
         path: String,
@@ -360,13 +375,13 @@ class Client @JvmOverloads constructor(
      *
      * @return [T]
      */
-    @Throws(RevenexxAPIRevenexxException::class)
+    @Throws(RevenexxException::class)
     suspend fun <T> chunkedUpload(
         path: String,
         headers:  MutableMap<String, String>,
         params: MutableMap<String, Any?>,
         responseType: Class<T>,
-        converter: ((Any) -> T),
+        converter: ((Any) -> T)? = null,
         paramName: String,
         idParamName: String? = null,
         onProgress: ((UploadProgress) -> Unit)? = null,
@@ -384,96 +399,42 @@ class Client @JvmOverloads constructor(
             else -> throw UnsupportedOperationException()
         }
 
-        if (size < CHUNK_SIZE) {
-            val data = when(input.sourceType) {
-                "file", "path" -> File(input.path).asRequestBody()
-                "bytes" -> (input.data as ByteArray).toRequestBody(input.mimeType.toMediaType())
-                else -> throw UnsupportedOperationException()
-            }
-            params[paramName] = MultipartBody.Part.createFormData(
-                paramName,
-                input.filename,
-                data
-            )
-            return call(
-                method = "POST",
-                path,
-                headers,
-                params,
-                responseType,
-                converter
-            )
+        // The API takes one multipart body per upload. It has no chunked or
+        // resumable protocol — no content-range, no upload id, no per-chunk
+        // endpoint — so the whole file always goes in a single request.
+        file?.close()
+
+        val data = when(input.sourceType) {
+            "file", "path" -> File(input.path).asRequestBody()
+            "bytes" -> (input.data as ByteArray).toRequestBody(input.mimeType.toMediaType())
+            else -> throw UnsupportedOperationException()
         }
+        params[paramName] = MultipartBody.Part.createFormData(
+            paramName,
+            input.filename,
+            data
+        )
 
-        val buffer = ByteArray(CHUNK_SIZE)
-        var offset = 0L
-        var result: Map<*, *>? = null
+        val result = call(
+            method = "POST",
+            path,
+            headers,
+            params,
+            responseType,
+            converter
+        )
 
-        if (idParamName?.isNotEmpty() == true) {
-            // Make a request to check if a file already exists
-            val current = call(
-                method = "GET",
-                path = "$path/${params[idParamName]}",
-                headers = headers,
-                params = emptyMap(),
-                responseType = Map::class.java,
+        onProgress?.invoke(
+            UploadProgress(
+                id = "",
+                progress = 100.0,
+                sizeUploaded = size,
+                chunksTotal = 1,
+                chunksUploaded = 1,
             )
-            val chunksUploaded = current["chunksUploaded"] as Long
-            offset = chunksUploaded * CHUNK_SIZE
-        }
+        )
 
-        while (offset < size) {
-            when(input.sourceType) {
-                "file", "path" -> {
-                    file!!.seek(offset)
-                    file!!.read(buffer)
-                }
-                "bytes" -> {
-                    val end = if (offset + CHUNK_SIZE < size) {
-                        offset + CHUNK_SIZE - 1
-                    } else {
-                        size - 1
-                    }
-                    (input.data as ByteArray).copyInto(
-                        buffer,
-                        startIndex = offset.toInt(),
-                        endIndex = end.toInt()
-                    )
-                }
-                else -> throw UnsupportedOperationException()
-            }
-
-            params[paramName] = MultipartBody.Part.createFormData(
-                paramName,
-                input.filename,
-                buffer.toRequestBody()
-            )
-
-            headers["Content-Range"] =
-                "bytes $offset-${((offset + CHUNK_SIZE) - 1).coerceAtMost(size - 1)}/$size"
-
-            result = call(
-                method = "POST",
-                path,
-                headers,
-                params,
-                responseType = Map::class.java
-            )
-
-            offset += CHUNK_SIZE
-            headers["x-revenexx api — revenexx-id"] = result["\$id"].toString()
-            onProgress?.invoke(
-                UploadProgress(
-                    id = result["\$id"].toString(),
-                    progress = offset.coerceAtMost(size).toDouble() / size * 100,
-                    sizeUploaded = offset.coerceAtMost(size),
-                    chunksTotal = result["chunksTotal"].toString().toInt(),
-                    chunksUploaded = result["chunksUploaded"].toString().toInt(),
-                )
-            )
-        }
-
-        return converter(result as Map<String, Any>)
+        return result
     }
 
     /**
@@ -485,7 +446,7 @@ class Client @JvmOverloads constructor(
      *
      * @return [T]
      */
-    @Throws(RevenexxAPIRevenexxException::class)
+    @Throws(RevenexxException::class)
     private suspend fun <T> awaitResponse(
         request: Request,
         responseType: Class<T>,
@@ -510,20 +471,24 @@ class Client @JvmOverloads constructor(
                     val error = if (response.headers["content-type"]?.contains("application/json") == true) {
                         val map = body.fromJson<Map<String, Any>>()
 
-                        RevenexxAPIRevenexxException(
-                            map["message"] as? String ?: "",
-                            (map["code"] as Number).toInt(),
-                            map["type"] as? String ?: "",
+                        // The gateway sends a string `code` ("bad_request") and no
+                        // numeric one, so casting it to Number throws and the real
+                        // error never surfaces. Fall back to the HTTP status, and
+                        // carry the string code through as the type.
+                        RevenexxException(
+                            map["message"] as? String ?: map["error"] as? String ?: "",
+                            (map["code"] as? Number)?.toInt() ?: response.code,
+                            map["type"] as? String ?: map["code"] as? String ?: "",
                             body
                         )
                     } else {
-                        RevenexxAPIRevenexxException(body, response.code, "", body)
+                        RevenexxException(body, response.code, "", body)
                     }
                     it.cancel(error)
                     return
                 }
 
-                val warnings = response.headers["x-revenexx api — revenexx-warning"]
+                val warnings = response.headers["x-revenexx-warning"]
                 if (warnings != null) {
                     warnings.split(";").forEach { warning ->
                         System.err.println("Warning: $warning")

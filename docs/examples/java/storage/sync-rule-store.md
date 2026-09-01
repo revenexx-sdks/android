@@ -9,12 +9,21 @@ Client client = new Client(context)
 
 Storage storage = new Storage(client);
 
-storage.syncRuleStore(new CoroutineCallback<>((result, error) -> {
-    if (error != null) {
-        error.printStackTrace();
-        return;
-    }
+storage.syncRuleStore(
+    "", // sftp_account_id 
+    "/uploads", // source_path 
+    true, // enabled (optional)
+    List.of(), // options (optional)
+    "0 3 * * *", // schedule (optional)
+    "", // target_folder_id (optional)
+    new CoroutineCallback<>((result, error) -> {
+        if (error != null) {
+            error.printStackTrace();
+            return;
+        }
 
-    Log.d("RevenexxAPIRevenexx", result.toString());
-}));
+        Log.d("Revenexx", result.toString());
+    })
+);
+
 ```

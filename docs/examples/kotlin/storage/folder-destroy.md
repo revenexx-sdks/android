@@ -11,6 +11,6 @@ val storage = Storage(client)
 
 val result = storage.folderDestroy(
     id = "", 
-    recursive = false, // (optional)
+    recursive = true, // (optional)
 )
 ```

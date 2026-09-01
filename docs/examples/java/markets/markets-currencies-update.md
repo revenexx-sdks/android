@@ -12,8 +12,8 @@ Markets markets = new Markets(client);
 markets.marketsCurrenciesUpdate(
     "", // market_id 
     "", // id 
-    "", // code (optional)
-    false, // is_default (optional)
+    "EUR", // code (optional)
+    true, // is_default (optional)
     0, // position (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -21,7 +21,7 @@ markets.marketsCurrenciesUpdate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

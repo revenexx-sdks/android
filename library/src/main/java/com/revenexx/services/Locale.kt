@@ -4,7 +4,7 @@ import android.net.Uri
 import com.revenexx.Client
 import com.revenexx.Service
 import com.revenexx.models.*
-import com.revenexx.exceptions.RevenexxAPIRevenexxException
+import com.revenexx.exceptions.RevenexxException
 import com.revenexx.extensions.classOf
 import okhttp3.Cookie
 import java.io.File

@@ -12,11 +12,11 @@ Apps apps = new Apps(client);
 
 apps.appsCreateExecution(
     "", // functionId 
-    false, // async (optional)
+    true, // async (optional)
     "", // body (optional)
     Map.of("a", "b"), // headers (optional)
     Method.GET, // method (optional)
-    "", // path (optional)
+    "/", // path (optional)
     "", // scheduledAt (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -24,7 +24,7 @@ apps.appsCreateExecution(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

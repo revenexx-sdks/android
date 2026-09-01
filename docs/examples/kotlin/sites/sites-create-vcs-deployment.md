@@ -2,7 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Sites
-import com.revenexx.enums.Type
+import com.revenexx.enums.SitesCreateTemplateDeploymentType
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,8 +12,8 @@ val sites = Sites(client)
 
 val result = sites.sitesCreateVcsDeployment(
     siteId = "", 
-    reference = "", 
-    type = type.BRANCH,
-    activate = false, // (optional)
+    reference = "main", 
+    type = SitesCreateTemplateDeploymentType.BRANCH,
+    activate = true, // (optional)
 )
 ```

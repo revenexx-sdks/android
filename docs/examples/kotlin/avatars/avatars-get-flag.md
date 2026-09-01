@@ -2,7 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Avatars
-import com.revenexx.enums.Code
+import com.revenexx.enums.AvatarsGetFlagCode
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -11,9 +11,9 @@ val client = Client(context)
 val avatars = Avatars(client)
 
 val result = avatars.avatarsGetFlag(
-    code = code.AF,
-    width = 0, // (optional)
-    height = 0, // (optional)
-    quality = 0, // (optional)
+    code = AvatarsGetFlagCode.AF,
+    width = 1, // (optional)
+    height = 1, // (optional)
+    quality = 1, // (optional)
 )
 ```

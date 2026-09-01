@@ -11,7 +11,7 @@ val orders = Orders(client)
 
 val result = orders.ordersCancel(
     id = "", 
-    cancelled_by = "", // (optional)
-    reason = "", // (optional)
+    cancelled_by = "service-desk", // (optional)
+    reason = "Customer withdrew the order", // (optional)
 )
 ```

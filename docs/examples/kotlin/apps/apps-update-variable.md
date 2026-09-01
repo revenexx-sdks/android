@@ -13,7 +13,7 @@ val result = apps.appsUpdateVariable(
     functionId = "", 
     variableId = "", 
     key = "", 
-    secret = false, // (optional)
+    secret = true, // (optional)
     value = "", // (optional)
 )
 ```

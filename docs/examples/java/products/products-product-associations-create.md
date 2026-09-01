@@ -13,15 +13,15 @@ products.productsProductAssociationsCreate(
     "", // association_type_id 
     "", // product_id 
     "", // target_product_id 
-    0, // position (optional)
-    0, // quantity (optional)
+    1, // position (optional)
+    4, // quantity (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

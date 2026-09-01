@@ -12,6 +12,6 @@ val pages = Pages(client)
 val result = pages.pagesMenusUpdate(
     id = "", 
     items = listOf(), // (optional)
-    label = "", // (optional)
+    label = "Main navigation", // (optional)
 )
 ```

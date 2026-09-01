@@ -8,7 +8,7 @@ import com.revenexx.extensions.jsonCast
  */
 data class ShippingRateTiersReplaceRequest(
     /**
-     * The complete new tier set (set semantics) — positions are derived from the array order.
+     * The complete new tier set (set semantics) — positions are derived from the array order. An empty array clears the matrix, and a matrix method with no tiers quotes nothing.
      */
     @SerializedName("tiers")
     val tiers: List<ShippingRateTierReplaceItem>,

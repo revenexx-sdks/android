@@ -13,14 +13,14 @@ Orders orders = new Orders(client);
 orders.ordersPaymentStatusUpdate(
     "", // id 
     OrderPaymentStatus.OPEN, // status 
-    "", // payment_id (optional)
+    "pay_000000000001", // payment_id (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

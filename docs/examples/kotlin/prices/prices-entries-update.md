@@ -13,14 +13,17 @@ val prices = Prices(client)
 val result = prices.pricesEntriesUpdate(
     list_id = "", 
     id = "", 
-    metadata = mapOf( "a" to "b" ), // (optional)
+    metadata = mapOf(
+        "imported_batch" to "2026-02-14",
+        "source_system" to "erp"
+    ), // (optional)
     price_type = PriceEntryType.STANDARD, // (optional)
     product_id = "", // (optional)
-    quantity_min = 0, // (optional)
-    sku = "", // (optional)
-    unit = "", // (optional)
-    unit_price = 0, // (optional)
-    valid_from = "", // (optional)
-    valid_until = "", // (optional)
+    quantity_min = 9.99, // (optional)
+    sku = "BOLT-M8-30", // (optional)
+    unit = "pcs", // (optional)
+    unit_price = 9.99, // (optional)
+    valid_from = "2026-03-01T00:00:00Z", // (optional)
+    valid_until = "2026-03-31T23:59:59Z", // (optional)
 )
 ```

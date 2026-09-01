@@ -11,15 +11,15 @@ Storage storage = new Storage(client);
 
 storage.syncRuleHistory(
     "", // rule_id (optional)
-    "", // from (optional)
-    "", // to (optional)
+    "2026-01-01T12:00:00Z", // from (optional)
+    "2026-01-01T12:00:00Z", // to (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

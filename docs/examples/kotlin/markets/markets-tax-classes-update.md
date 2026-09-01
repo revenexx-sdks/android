@@ -12,11 +12,14 @@ val markets = Markets(client)
 val result = markets.marketsTaxClassesUpdate(
     market_id = "", 
     id = "", 
-    code = "", // (optional)
-    is_default = false, // (optional)
-    labels = mapOf( "a" to "b" ), // (optional)
-    name = "", // (optional)
+    code = "standard", // (optional)
+    is_default = true, // (optional)
+    labels = mapOf(
+        "de-DE" to "Regelsatz",
+        "en-GB" to "Standard rate"
+    ), // (optional)
+    name = "Standard rate", // (optional)
     position = 0, // (optional)
-    rate = 0, // (optional)
+    rate = 20, // (optional)
 )
 ```

@@ -8,31 +8,25 @@ import com.revenexx.extensions.jsonCast
  */
 data class CartUpdateRequest(
     /**
-     * 
+     * Move the cart to another sales channel.
      */
     @SerializedName("channel_id")
     var channel_id: String?,
 
     /**
-     * ISO 4217 code.
+     * ISO 4217 code. Changes what NEW lines inherit; lines already in the cart keep the currency they were added with.
      */
     @SerializedName("currency")
     var currency: String?,
 
     /**
-     * 
-     */
-    @SerializedName("market_id")
-    var market_id: String?,
-
-    /**
-     * Free-form metadata.
+     * Free-form data the storefront hangs on the cart. Stored and returned verbatim; no key in here is read by this app, and none is indexed.
      */
     @SerializedName("metadata")
     var metadata: Any?,
 
     /**
-     * 
+     * Rename the cart. Unlike on create, this is written verbatim — `null` and `''` are refused by the database.
      */
     @SerializedName("name")
     var name: String?,
@@ -41,7 +35,6 @@ data class CartUpdateRequest(
     fun toMap(): Map<String, Any> = mapOf(
         "channel_id" to channel_id as Any,
         "currency" to currency as Any,
-        "market_id" to market_id as Any,
         "metadata" to metadata as Any,
         "name" to name as Any,
     )
@@ -54,7 +47,6 @@ data class CartUpdateRequest(
         ) = CartUpdateRequest(
             channel_id = map["channel_id"] as? String,
             currency = map["currency"] as? String,
-            market_id = map["market_id"] as? String,
             metadata = map["metadata"] as? Any,
             name = map["name"] as? String,
         )

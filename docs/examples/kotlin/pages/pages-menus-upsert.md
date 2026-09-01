@@ -10,8 +10,8 @@ val client = Client(context)
 val pages = Pages(client)
 
 val result = pages.pagesMenusUpsert(
-    label = "", 
-    menuKey = "", 
+    label = "Main navigation", 
+    menuKey = "main", 
     items = listOf(), // (optional)
 )
 ```

@@ -8,19 +8,19 @@ import com.revenexx.extensions.jsonCast
  */
 data class MarketCurrencyUpdateRequest(
     /**
-     * ISO 4217 code, e.g. EUR (unique per market).
+     * ISO 4217 code, unique per market — one entry in the set of currencies this market TRADES in, as opposed to the single base currency on the market row that its prices are quoted in. The base currency must appear here or the market cannot serve; clone and backfill register it for you.
      */
     @SerializedName("code")
     var code: String?,
 
     /**
-     * 
+     * The currency offered first to a buyer who states no preference. At most one per market, and it should be the market's base currency — readiness reports it as a warning when it is not.
      */
     @SerializedName("is_default")
     var is_default: Boolean?,
 
     /**
-     * Sort position (default 0).
+     * Sort position among this market's currencies, ascending, default 0 — the order a currency switcher lists them in.
      */
     @SerializedName("position")
     var position: Long?,

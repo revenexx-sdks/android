@@ -10,14 +10,16 @@ Client client = new Client(context)
 Orders orders = new Orders(client);
 
 orders.ordersNumberRangesCreate(
-    "", // code 
+    "order", // code 
     "", // channel_id (optional)
-    0, // counter (optional)
-    Map.of("a", "b"), // metadata (optional)
-    0, // padding (optional)
-    0, // position_step (optional)
-    "", // prefix (optional)
-    0, // step (optional)
+    123, // counter (optional)
+    Map.of(
+        "owner", "erp-sync"
+    ), // metadata (optional)
+    6, // padding (optional)
+    10, // position_step (optional)
+    "ORD-", // prefix (optional)
+    1, // step (optional)
     "", // suffix (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -25,7 +27,7 @@ orders.ordersNumberRangesCreate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

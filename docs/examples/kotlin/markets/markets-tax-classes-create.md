@@ -11,11 +11,14 @@ val markets = Markets(client)
 
 val result = markets.marketsTaxClassesCreate(
     market_id = "", 
-    code = "", 
-    name = "", 
-    is_default = false, // (optional)
-    labels = mapOf( "a" to "b" ), // (optional)
+    code = "standard", 
+    name = "Standard rate", 
+    is_default = true, // (optional)
+    labels = mapOf(
+        "de-DE" to "Regelsatz",
+        "en-GB" to "Standard rate"
+    ), // (optional)
     position = 0, // (optional)
-    rate = 0, // (optional)
+    rate = 20, // (optional)
 )
 ```

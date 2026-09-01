@@ -13,6 +13,6 @@ val result = apps.appsCreateVariable(
     functionId = "", 
     key = "", 
     value = "", 
-    secret = false, // (optional)
+    secret = true, // (optional)
 )
 ```

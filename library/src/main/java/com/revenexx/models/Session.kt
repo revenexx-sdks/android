@@ -26,7 +26,7 @@ data class Session(
     val updatedAt: String,
 
     /**
-     * Client code name. View list of [available options](https://github.com/appwrite/appwrite/blob/master/docs/lists/clients.json).
+     * Client code name. A short code such as `CH` for Chrome, derived from the request's User-Agent by the core service; the full code list is not part of this API.
      */
     @SerializedName("clientCode")
     val clientCode: String,
@@ -122,7 +122,7 @@ data class Session(
     val mfaUpdatedAt: String,
 
     /**
-     * Operating system code name. View list of [available options](https://github.com/appwrite/appwrite/blob/master/docs/lists/os.json).
+     * Operating system code name. A short code such as `AND` for Android, derived from the request's User-Agent by the core service; the full code list is not part of this API.
      */
     @SerializedName("osCode")
     val osCode: String,

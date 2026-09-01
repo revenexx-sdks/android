@@ -20,7 +20,7 @@ data class File(
     val id: String,
 
     /**
-     * File permissions. [Learn more about permissions](https://appwrite.io/docs/permissions).
+     * File permissions. Each entry is a permission string: an action wrapping a role, e.g. `read("any")`, `update("user:abc")`, `delete("team:abc/owner")`. Actions are `read`, `create`, `update`, `delete` and the aggregate `write` (= create + update + delete); the role inside the quotes takes the form described under “Role strings” in this document's introduction.
      */
     @SerializedName("\$permissions")
     val permissions: List<String>,

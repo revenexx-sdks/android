@@ -4,25 +4,18 @@ import com.google.gson.annotations.SerializedName
 import com.revenexx.extensions.jsonCast
 
 /**
- * Collections List
+ * 
  */
 data class CollectionList(
     /**
-     * List of collections.
+     * Public collection names the tenant owns. These are the values accepted for the `collection` path parameter.
      */
     @SerializedName("collections")
-    val collections: List<Collection>,
-
-    /**
-     * Total number of collections that matched your query.
-     */
-    @SerializedName("total")
-    val total: Long,
+    val collections: List<String>,
 
 ) {
     fun toMap(): Map<String, Any> = mapOf(
-        "collections" to collections.map { it.toMap() } as Any,
-        "total" to total as Any,
+        "collections" to collections as Any,
     )
 
     companion object {
@@ -31,8 +24,7 @@ data class CollectionList(
         fun from(
             map: Map<String, Any>,
         ) = CollectionList(
-            collections = (map["collections"] as List<Map<String, Any>>).map { Collection.from(map = it) },
-            total = (map["total"] as Number).toLong(),
+            collections = map["collections"] as List<String>,
         )
     }
 }

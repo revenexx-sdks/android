@@ -10,8 +10,8 @@ val client = Client(context)
 val avatars = Avatars(client)
 
 val result = avatars.avatarsGetImage(
-    url = "", 
-    width = 0, // (optional)
-    height = 0, // (optional)
+    url = "https://www.revenexx.com/img/hero-revenexx-poster.webp", 
+    width = 1, // (optional)
+    height = 1, // (optional)
 )
 ```

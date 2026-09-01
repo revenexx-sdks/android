@@ -8,13 +8,13 @@ import com.revenexx.extensions.jsonCast
  */
 data class AuthMeRequest(
     /**
-     * Optional session to verify — answers 401 when the session is expired or revoked.
+     * Optional session to verify. Pass it to ask "is this session still alive?" (a revoked one is then a 401); omit it to only ask who a user is.
      */
     @SerializedName("session_id")
     var session_id: String?,
 
     /**
-     * 
+     * The platform user to resolve — `session.userId` from the login.
      */
     @SerializedName("user_id")
     val user_id: String,

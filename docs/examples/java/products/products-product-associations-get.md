@@ -17,7 +17,7 @@ products.productsProductAssociationsGet(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

@@ -12,19 +12,22 @@ Carts carts = new Carts(client);
 carts.cartsCreate(
     "", // channel_id (optional)
     "", // contact_id (optional)
-    "", // currency (optional)
-    false, // is_current (optional)
-    "", // market_id (optional)
-    Map.of("a", "b"), // metadata (optional)
-    "", // name (optional)
-    "", // session_key (optional)
+    "EUR", // currency (optional)
+    true, // is_current (optional)
+    Map.of(
+        "campaign", "spring-catalogue",
+        "locale", "de-DE",
+        "source", "storefront"
+    ), // metadata (optional)
+    "Weekly order", // name (optional)
+    "a1b2c3d4e5f6", // session_key (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

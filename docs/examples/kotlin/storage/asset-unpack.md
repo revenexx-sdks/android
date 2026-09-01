@@ -11,7 +11,7 @@ val storage = Storage(client)
 
 val result = storage.assetUnpack(
     id = "", 
-    keep_archive = false, // (optional)
+    keep_archive = true, // (optional)
     target_folder_id = "", // (optional)
 )
 ```

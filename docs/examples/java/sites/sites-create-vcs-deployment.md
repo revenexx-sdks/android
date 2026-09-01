@@ -2,7 +2,7 @@
 import com.revenexx.Client;
 import com.revenexx.coroutines.CoroutineCallback;
 import com.revenexx.services.Sites;
-import com.revenexx.enums.Type;
+import com.revenexx.enums.SitesCreateTemplateDeploymentType;
 
 Client client = new Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,16 +12,16 @@ Sites sites = new Sites(client);
 
 sites.sitesCreateVcsDeployment(
     "", // siteId 
-    "", // reference 
-    Type.BRANCH, // type 
-    false, // activate (optional)
+    "main", // reference 
+    SitesCreateTemplateDeploymentType.BRANCH, // type 
+    true, // activate (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

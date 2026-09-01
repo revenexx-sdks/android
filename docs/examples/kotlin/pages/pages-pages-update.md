@@ -12,10 +12,10 @@ val pages = Pages(client)
 
 val result = pages.pagesPagesUpdate(
     id = "", 
-    bundle = "", // (optional)
+    bundle = "standard", // (optional)
     meta = mapOf( "a" to "b" ), // (optional)
-    slug = "", // (optional)
+    slug = "about-us", // (optional)
     status = PageStatus.DRAFT, // (optional)
-    title = "", // (optional)
+    title = "About us", // (optional)
 )
 ```

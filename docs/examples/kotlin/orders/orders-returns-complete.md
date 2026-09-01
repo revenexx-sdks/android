@@ -2,6 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Orders
+import com.revenexx.enums.OrderReturnSettlement
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -12,6 +13,6 @@ val orders = Orders(client)
 val result = orders.ordersReturnsComplete(
     id = "", 
     rid = "", 
-    resolution = "", // (optional)
+    resolution = OrderReturnSettlement.REFUND, // (optional)
 )
 ```

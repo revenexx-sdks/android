@@ -12,11 +12,14 @@ Markets markets = new Markets(client);
 
 markets.marketsUpdate(
     "", // id 
-    "", // code (optional)
-    "", // currency (optional)
+    "northwind", // code (optional)
+    "EUR", // currency (optional)
     false, // is_default (optional)
-    Map.of("a", "b"), // labels (optional)
-    "", // name (optional)
+    Map.of(
+        "de-DE", "Nordwind",
+        "en-GB", "Northwind"
+    ), // labels (optional)
+    "Northwind", // name (optional)
     0, // position (optional)
     MarketStatus.ACTIVE, // status (optional)
     new CoroutineCallback<>((result, error) -> {
@@ -25,7 +28,7 @@ markets.marketsUpdate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

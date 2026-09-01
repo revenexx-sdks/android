@@ -2,6 +2,7 @@
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
 import com.revenexx.services.Products
+import com.revenexx.enums.Kind
 
 val client = Client(context)
     .setEndpoint("https://api.revenexx.com") // Your API Endpoint
@@ -9,5 +10,24 @@ val client = Client(context)
 
 val products = Products(client)
 
-val result = products.productsList()
+val result = products.productsList(
+    limit = 1, // (optional)
+    offset = 1, // (optional)
+    order = "created_at.desc", // (optional)
+    id = "", // (optional)
+    sku = "ACME-4711-BLK", // (optional)
+    kind = kind.SIMPLE, // (optional)
+    parent_id = "", // (optional)
+    family_id = "", // (optional)
+    family_variant_id = "", // (optional)
+    enabled = true, // (optional)
+    tax_class = "standard", // (optional)
+    attribute_values = "{}", // (optional)
+    label = "Akku-Bohrschrauber 18V", // (optional)
+    quantified_associations = "{}", // (optional)
+    completeness = "{}", // (optional)
+    created_at = "2026-01-01T12:00:00Z", // (optional)
+    updated_at = "2026-01-01T12:00:00Z", // (optional)
+    deleted_at = "2026-01-01T12:00:00Z", // (optional)
+)
 ```

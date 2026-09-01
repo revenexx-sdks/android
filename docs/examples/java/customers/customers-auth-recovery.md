@@ -10,15 +10,15 @@ Client client = new Client(context)
 Customers customers = new Customers(client);
 
 customers.customersAuthRecovery(
-    "", // email 
-    "", // url 
+    "einkauf@example.com", // email 
+    "https://example.com", // url 
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

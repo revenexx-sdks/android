@@ -11,7 +11,7 @@ val client = Client(context)
 val search = Search(client)
 
 val result = search.searchGetDocument(
-    collection = collection.GREETINGS,
+    collection = collection.PRODUCTS,
     documentId = "", 
 )
 ```

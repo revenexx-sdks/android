@@ -4,13 +4,13 @@ import android.net.Uri
 import com.revenexx.Client
 import com.revenexx.Service
 import com.revenexx.models.*
-import com.revenexx.exceptions.RevenexxAPIRevenexxException
+import com.revenexx.exceptions.RevenexxException
 import com.revenexx.extensions.classOf
 import okhttp3.Cookie
 import java.io.File
 
 /**
- * Generated avatars, initials, QR codes, country flags and favicons.
+ * Generated images: initials, QR codes, country flags, browser and credit-card icons. Every operation answers image bytes, not JSON.
  */
 class Avatars(client: Client) : Service(client) {
 
@@ -66,7 +66,7 @@ class Avatars(client: Client) : Service(client) {
      */
     @JvmOverloads
     suspend fun avatarsGetCreditCard(
-        code: com.revenexx.enums.Code,
+        code: com.revenexx.enums.AvatarsGetCreditCardCode,
         width: Long? = null,
         height: Long? = null,
         quality: Long? = null,
@@ -78,34 +78,6 @@ class Avatars(client: Client) : Service(client) {
             "width" to width,
             "height" to height,
             "quality" to quality,
-        )
-        val apiHeaders = mutableMapOf<String, String>(
-        )
-        return client.call(
-            "GET",
-            apiPath,
-            apiHeaders,
-            apiParams,
-            responseType = Any::class.java,
-        )
-    }
-
-
-    /**
-     * Use this endpoint to fetch the favorite icon (AKA favicon) of any remote website URL.
-     * 
-     * This endpoint does not follow HTTP redirects.
-     *
-     * @param url Website URL which you want to fetch the favicon from.
-     * @return [Any]
-     */
-    suspend fun avatarsGetFavicon(
-        url: String,
-    ): Any {
-        val apiPath = "/v1/avatars/favicon"
-
-        val apiParams = mutableMapOf<String, Any?>(
-            "url" to url,
         )
         val apiHeaders = mutableMapOf<String, String>(
         )
@@ -133,7 +105,7 @@ class Avatars(client: Client) : Service(client) {
      */
     @JvmOverloads
     suspend fun avatarsGetFlag(
-        code: com.revenexx.enums.Code,
+        code: com.revenexx.enums.AvatarsGetFlagCode,
         width: Long? = null,
         height: Long? = null,
         quality: Long? = null,
@@ -165,7 +137,7 @@ class Avatars(client: Client) : Service(client) {
      * 
      * This endpoint does not follow HTTP redirects.
      *
-     * @param url Image URL which you want to crop.
+     * @param url Image URL which you want to crop. Must be publicly reachable and answer 200 with a raster image on the first request: the fetch does not follow redirects, so a URL that 301s answers 404, as does any URL whose response is not 200. The bytes are decoded by Imagick — an SVG (including most `favicon.ico` files, which are SVG in disguise) and a genuine `.ico` both fail to decode and answer 500.
      * @param width Resize preview image width, Pass an integer between 0 to 2000. Defaults to 400.
      * @param height Resize preview image height, Pass an integer between 0 to 2000. Defaults to 400.
      * @return [Any]
@@ -289,7 +261,7 @@ class Avatars(client: Client) : Service(client) {
      * @param userAgent Custom user agent string. Defaults to browser default.
      * @param fullpage Capture full page scroll. Pass 0 for viewport only, or 1 for full page. Defaults to 0.
      * @param locale Browser locale (e.g., "en-US", "fr-FR"). Defaults to browser default.
-     * @param timezone IANA timezone identifier (e.g., "America/New_York", "Europe/London"). Defaults to browser default.
+     * @param timezone IANA timezone identifier, canonically cased (e.g. `America/New_York`, `Europe/London`). Defaults to the browser default. Only two-segment identifiers are accepted: `UTC` and the three-segment ids such as `America/Argentina/Buenos_Aires` are refused with 404.
      * @param latitude Geolocation latitude. Pass a number between -90 to 90. Defaults to 0.
      * @param longitude Geolocation longitude. Pass a number between -180 to 180. Defaults to 0.
      * @param accuracy Geolocation accuracy in meters. Pass a number between 0 to 100000. Defaults to 0.

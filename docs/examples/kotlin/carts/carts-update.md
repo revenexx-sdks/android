@@ -12,9 +12,12 @@ val carts = Carts(client)
 val result = carts.cartsUpdate(
     id = "", 
     channel_id = "", // (optional)
-    currency = "", // (optional)
-    market_id = "", // (optional)
-    metadata = mapOf( "a" to "b" ), // (optional)
-    name = "", // (optional)
+    currency = "EUR", // (optional)
+    metadata = mapOf(
+        "campaign" to "spring-catalogue",
+        "locale" to "de-DE",
+        "source" to "storefront"
+    ), // (optional)
+    name = "Weekly order", // (optional)
 )
 ```

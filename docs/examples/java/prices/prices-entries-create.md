@@ -12,22 +12,25 @@ Prices prices = new Prices(client);
 
 prices.pricesEntriesCreate(
     "", // list_id 
-    Map.of("a", "b"), // metadata (optional)
+    Map.of(
+        "imported_batch", "2026-02-14",
+        "source_system", "erp"
+    ), // metadata (optional)
     PriceEntryType.STANDARD, // price_type (optional)
     "", // product_id (optional)
-    0, // quantity_min (optional)
-    "", // sku (optional)
-    "", // unit (optional)
-    0, // unit_price (optional)
-    "", // valid_from (optional)
-    "", // valid_until (optional)
+    9.99, // quantity_min (optional)
+    "BOLT-M8-30", // sku (optional)
+    "pcs", // unit (optional)
+    9.99, // unit_price (optional)
+    "2026-03-01T00:00:00Z", // valid_from (optional)
+    "2026-03-31T23:59:59Z", // valid_until (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

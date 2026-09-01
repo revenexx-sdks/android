@@ -1,6 +1,7 @@
 ```kotlin
 import com.revenexx.Client
 import com.revenexx.coroutines.CoroutineCallback
+import com.revenexx.models.InputFile
 import com.revenexx.services.Storage
 import com.revenexx.enums.Visibility
 
@@ -11,14 +12,14 @@ val client = Client(context)
 val storage = Storage(client)
 
 val result = storage.assetStore(
-    file = "", 
+    file = InputFile.fromPath("file.png"), 
     alt_text = "", // (optional)
     description = "", // (optional)
     display_name = "", // (optional)
     folder_id = "", // (optional)
-    keep_archive = false, // (optional)
+    keep_archive = true, // (optional)
     tags = listOf(), // (optional)
-    unpack = false, // (optional)
+    unpack = true, // (optional)
     visibility = visibility.PUBLIC, // (optional)
 )
 ```

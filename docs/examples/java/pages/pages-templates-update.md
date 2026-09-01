@@ -11,11 +11,11 @@ Pages pages = new Pages(client);
 
 pages.pagesTemplatesUpdate(
     "", // id 
-    "", // description (optional)
-    "", // field_name (optional)
-    false, // is_default (optional)
-    "", // label (optional)
-    "", // page_bundle (optional)
+    "Full-width hero followed by a two-column teaser row.", // description (optional)
+    "content", // field_name (optional)
+    true, // is_default (optional)
+    "Hero with two teasers", // label (optional)
+    "standard", // page_bundle (optional)
     List.of(), // tree (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -23,7 +23,7 @@ pages.pagesTemplatesUpdate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

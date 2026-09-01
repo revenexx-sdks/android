@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName
 import com.revenexx.extensions.jsonCast
 
 /**
- * Published page resolved for one language: nested block tree with i18n fallback applied and scheduled blocks filtered.
+ * One published page resolved for one language, ready to render: i18n fallback applied per field, blocks outside their publish window removed, library references expanded inline.
  */
 data class DeliveryPage(
     /**
-     * Field name → ordered block list ({ uuid, bundle, props, options, children }).
+     * The page's block tree, keyed by field name — `{ "content": [ … ] }`. A theme renders the field it knows and ignores the rest.
      */
     @SerializedName("fields")
     var fields: Any?,
 
     /**
-     * 
+     * The page frame — everything a theme needs before it starts rendering blocks.
      */
     @SerializedName("page")
     var page: Any?,

@@ -13,6 +13,6 @@ val result = sites.sitesListDeployments(
     siteId = "", 
     queries = listOf(), // (optional)
     search = "", // (optional)
-    total = false, // (optional)
+    total = true, // (optional)
 )
 ```

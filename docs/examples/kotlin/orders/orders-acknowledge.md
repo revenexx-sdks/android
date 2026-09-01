@@ -11,6 +11,6 @@ val orders = Orders(client)
 
 val result = orders.ordersAcknowledge(
     id = "", 
-    external_ref = "", // (optional)
+    external_ref = "ERP-4711", // (optional)
 )
 ```

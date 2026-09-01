@@ -10,20 +10,23 @@ Client client = new Client(context)
 Customers customers = new Customers(client);
 
 customers.customersAuthRegister(
-    "", // email 
+    "einkauf@example.com", // email 
     "", // password 
-    "", // first_name (optional)
-    "", // last_name (optional)
-    "", // locale (optional)
+    "Anna", // first_name (optional)
+    "Berger", // last_name (optional)
+    "de-DE", // locale (optional)
     "", // organization_id (optional)
-    "", // organization_name (optional)
+    "Beispiel Industrietechnik GmbH", // organization_name (optional)
+    "https://shop.example.com/account", // url (optional)
+    "DE123456789", // vat_id (optional)
+    "https://shop.example.com/bestaetigen", // verification_url (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
             error.printStackTrace();
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

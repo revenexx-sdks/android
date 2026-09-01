@@ -11,8 +11,8 @@ Pages pages = new Pages(client);
 
 pages.pagesLibraryUpdate(
     "", // id 
-    "", // bundle (optional)
-    "", // label (optional)
+    "teaser", // bundle (optional)
+    "Newsletter teaser", // label (optional)
     Map.of("a", "b"), // tree (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -20,7 +20,7 @@ pages.pagesLibraryUpdate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 

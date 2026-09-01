@@ -5,7 +5,7 @@ plugins {
 
 ext {
     PUBLISH_GROUP_ID = 'com.revenexx'
-    PUBLISH_ARTIFACT_ID = 'android'
+    PUBLISH_ARTIFACT_ID = 'revenexx-android'
     PUBLISH_VERSION = System.getenv('SDK_VERSION')
     POM_URL = 'https://github.com/revenexx-sdks/android'
     POM_SCM_URL = 'https://github.com/revenexx-sdks/android'

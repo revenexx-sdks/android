@@ -12,9 +12,9 @@ Products products = new Products(client);
 products.productsProductAssociationsUpdate(
     "", // id 
     "", // association_type_id (optional)
-    0, // position (optional)
+    1, // position (optional)
     "", // product_id (optional)
-    0, // quantity (optional)
+    4, // quantity (optional)
     "", // target_product_id (optional)
     new CoroutineCallback<>((result, error) -> {
         if (error != null) {
@@ -22,7 +22,7 @@ products.productsProductAssociationsUpdate(
             return;
         }
 
-        Log.d("RevenexxAPIRevenexx", result.toString());
+        Log.d("Revenexx", result.toString());
     })
 );
 
